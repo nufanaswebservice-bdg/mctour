@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Bell, Heart, User } from "lucide-react";
@@ -51,13 +50,11 @@ export default function TopBar() {
         <div className="flex items-center justify-between px-4 h-14 max-w-7xl mx-auto">
           {/* Logo */}
           <Link href="/">
-            <Image
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src="/logo-mctour.png"
-              alt="mcTour & Travel"
-              width={100}
-              height={36}
-              className="h-7 w-auto object-contain"
-              priority
+              alt="mcTour"
+              className="h-8 w-auto object-contain"
             />
           </Link>
 
