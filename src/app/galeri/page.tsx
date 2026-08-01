@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 const AppShell = dynamic(() => import("@/components/app/AppShell"));
 const TopBar = dynamic(() => import("@/components/app/TopBar"));
 const Gallery = dynamic(() => import("@/components/app/Gallery"));
+const CTABanner = dynamic(() => import("@/components/app/CTABanner"));
 
 export const metadata: Metadata = {
   title: "Galeri Perjalanan",
@@ -15,6 +16,7 @@ export default function GaleriPage() {
     <AppShell>
       <TopBar />
       <Gallery />
+      <CTABanner />
     </AppShell>
   );
 }

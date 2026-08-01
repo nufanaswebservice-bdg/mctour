@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 const AppShell = dynamic(() => import("@/components/app/AppShell"));
 const TopBar = dynamic(() => import("@/components/app/TopBar"));
 const ContactPage = dynamic(() => import("@/components/app/ContactPage"));
+const CTABanner = dynamic(() => import("@/components/app/CTABanner"));
 
 export const metadata: Metadata = {
   title: "Kontak Kami",
@@ -16,6 +17,7 @@ export default function KontakPage() {
     <AppShell>
       <TopBar />
       <ContactPage />
+      <CTABanner />
     </AppShell>
   );
 }

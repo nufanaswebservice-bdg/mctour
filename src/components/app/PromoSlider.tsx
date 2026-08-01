@@ -1,15 +1,16 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { motion } from "framer-motion";
 
 const promos = [
-  { id: 1, image: "/banner-bali.png", alt: "Promo Paket Bali" },
-  { id: 2, image: "/banner-gathering.png", alt: "Promo Gathering Perusahaan" },
-  { id: 3, image: "/banner-korea.png", alt: "Promo Tour Korea" },
-  { id: 4, image: "/banner-umroh.png", alt: "Promo Paket Umroh" },
+  { id: 1, image: "/banner-bali.png", alt: "Promo Paket Bali", href: "/paket-tour-domestik" },
+  { id: 2, image: "/banner-gathering.png", alt: "Promo Gathering Perusahaan", href: "/event-organizer" },
+  { id: 3, image: "/banner-korea.png", alt: "Promo Tour Korea", href: "/paket-tour-luar-negeri" },
+  { id: 4, image: "/banner-umroh.png", alt: "Promo Paket Umroh", href: "/umroh-haji" },
 ];
 
 export default function PromoSlider() {
@@ -46,13 +47,15 @@ export default function PromoSlider() {
               key={promo.id}
               className="flex-shrink-0 w-[85%] sm:w-[70%] md:w-[45%] lg:w-[30%]"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={promo.image}
-                alt={promo.alt}
-                className="w-full h-auto rounded-3xl object-cover"
-                loading="lazy"
-              />
+              <Link href={promo.href} className="block active:scale-[0.98] transition-transform">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={promo.image}
+                  alt={promo.alt}
+                  className="w-full h-auto rounded-3xl object-cover"
+                  loading="lazy"
+                />
+              </Link>
             </div>
           ))}
         </div>

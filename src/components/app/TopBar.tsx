@@ -44,17 +44,19 @@ export default function TopBar() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.25 }}
         className={`sticky top-0 z-50 transition-all duration-200 ${
-          scrolled ? "glass-strong shadow-sm" : "bg-transparent"
+          scrolled
+            ? "bg-blue-100/70 backdrop-blur-xl border-b border-blue-200/30 shadow-sm"
+            : "bg-blue-50/50 backdrop-blur-md"
         }`}
       >
-        <div className="flex items-center justify-between px-4 h-14 max-w-7xl mx-auto">
+        <div className="flex items-center justify-between px-4 h-16 max-w-7xl mx-auto">
           {/* Logo */}
           <Link href="/">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/logo-mctour.png"
               alt="mcTour"
-              className="h-8 w-auto object-contain"
+              className="h-11 w-auto object-contain"
             />
           </Link>
 

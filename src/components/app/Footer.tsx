@@ -72,7 +72,7 @@ export default function Footer() {
             <img
               src="/logo-mctour.png"
               alt="mcTour & Travel"
-              className="h-9 w-auto object-contain mb-3"
+              className="h-14 w-auto object-contain mb-3"
             />
             <p className="text-xs text-muted leading-relaxed mb-4 max-w-sm">
               Gathering Nyaman Bersama mcTour & Travel. Melayani segala kebutuhan perjalanan Anda dengan pelayanan profesional, armada terbaik, dan harga kompetitif.

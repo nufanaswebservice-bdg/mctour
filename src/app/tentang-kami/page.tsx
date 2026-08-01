@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 
 const AppShell = dynamic(() => import("@/components/app/AppShell"));
 const TopBar = dynamic(() => import("@/components/app/TopBar"));
+const CTABanner = dynamic(() => import("@/components/app/CTABanner"));
 
 export const metadata: Metadata = {
   title: "Tentang Kami",
@@ -59,6 +60,7 @@ export default function TentangKamiPage() {
           </div>
         </div>
       </div>
+      <CTABanner />
     </AppShell>
   );
 }
