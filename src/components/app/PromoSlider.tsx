@@ -6,39 +6,15 @@ import Autoplay from "embla-carousel-autoplay";
 import { motion } from "framer-motion";
 
 const promos = [
-  {
-    id: 1,
-    title: "Diskon 20% Paket Bali",
-    subtitle: "Berlaku hingga akhir bulan",
-    gradient: "from-primary to-primary-light",
-    emoji: "🏝️",
-  },
-  {
-    id: 2,
-    title: "Company Gathering Hemat",
-    subtitle: "Mulai Rp 500rb/orang",
-    gradient: "from-secondary to-secondary-light",
-    emoji: "🏢",
-  },
-  {
-    id: 3,
-    title: "Tour Korea Autumn 2026",
-    subtitle: "Slot terbatas, booking sekarang!",
-    gradient: "from-primary-dark to-primary",
-    emoji: "🇰🇷",
-  },
-  {
-    id: 4,
-    title: "Umroh Reguler Desember",
-    subtitle: "Berangkat pasti, seat terbatas",
-    gradient: "from-[#2E7D32] to-[#4CAF50]",
-    emoji: "🕋",
-  },
+  { id: 1, image: "/banner-bali.png", alt: "Promo Paket Bali" },
+  { id: 2, image: "/banner-gathering.png", alt: "Promo Gathering Perusahaan" },
+  { id: 3, image: "/banner-korea.png", alt: "Promo Tour Korea" },
+  { id: 4, image: "/banner-umroh.png", alt: "Promo Paket Umroh" },
 ];
 
 export default function PromoSlider() {
   const [emblaRef, emblaApi] = useEmblaCarousel(
-    { loop: true, align: "start", dragFree: true },
+    { loop: true, align: "start" },
     [Autoplay({ delay: 4000, stopOnInteraction: false })]
   );
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -70,25 +46,13 @@ export default function PromoSlider() {
               key={promo.id}
               className="flex-shrink-0 w-[85%] sm:w-[70%] md:w-[45%] lg:w-[30%]"
             >
-              <div
-                className={`relative h-36 md:h-40 rounded-3xl bg-gradient-to-br ${promo.gradient} p-5 flex flex-col justify-between overflow-hidden`}
-              >
-                {/* Decorative circle */}
-                <div className="absolute -top-6 -right-6 w-24 h-24 bg-white/10 rounded-full" />
-                <div className="absolute -bottom-4 -right-4 w-16 h-16 bg-white/5 rounded-full" />
-
-                <div className="relative z-10">
-                  <p className="text-white/80 text-xs font-medium">PROMO</p>
-                  <h3 className="text-white text-base font-bold mt-1 font-[family-name:var(--font-heading)]">
-                    {promo.title}
-                  </h3>
-                  <p className="text-white/70 text-xs mt-1">{promo.subtitle}</p>
-                </div>
-
-                <span className="absolute bottom-4 right-5 text-4xl opacity-30">
-                  {promo.emoji}
-                </span>
-              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={promo.image}
+                alt={promo.alt}
+                className="w-full h-auto rounded-3xl object-cover"
+                loading="lazy"
+              />
             </div>
           ))}
         </div>
