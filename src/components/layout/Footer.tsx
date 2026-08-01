@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 const footerLinks = {
@@ -77,18 +78,14 @@ export default function Footer() {
             viewport={{ once: true }}
             className="space-y-4"
           >
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-light flex items-center justify-center">
-                <span className="text-white font-bold text-lg font-[family-name:var(--font-heading)]">
-                  mc
-                </span>
-              </div>
-              <div>
-                <span className="font-bold text-primary text-lg font-[family-name:var(--font-heading)]">
-                  mcTour
-                </span>
-                <span className="text-dark-text font-medium"> & Travel</span>
-              </div>
+            <Link href="/" className="flex items-center">
+              <Image
+                src="/logo-mctour.jpg"
+                alt="mcTour & Travel"
+                width={140}
+                height={50}
+                className="h-10 w-auto object-contain"
+              />
             </Link>
             <p className="text-sm text-dark-text/60 leading-relaxed">
               Gathering Nyaman Bersama mcTour & Travel. Melayani segala kebutuhan

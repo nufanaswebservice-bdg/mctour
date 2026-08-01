@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
@@ -39,18 +40,15 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-light flex items-center justify-center">
-              <span className="text-white font-bold text-lg font-[family-name:var(--font-heading)]">
-                mc
-              </span>
-            </div>
-            <div className="hidden sm:block">
-              <span className="font-bold text-primary text-lg font-[family-name:var(--font-heading)]">
-                mcTour
-              </span>
-              <span className="text-dark-text font-medium"> & Travel</span>
-            </div>
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/logo-mctour.jpg"
+              alt="mcTour & Travel"
+              width={140}
+              height={50}
+              className="h-10 md:h-12 w-auto object-contain"
+              priority
+            />
           </Link>
 
           {/* Desktop Navigation */}
