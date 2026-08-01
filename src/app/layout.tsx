@@ -26,6 +26,16 @@ export const metadata: Metadata = {
   },
   description:
     "mcTour & Travel melayani segala kebutuhan perjalanan Anda dengan pelayanan profesional, armada terbaik, dan harga kompetitif. Paket Tour, Outbound, Event Organizer, Umroh & Haji.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
   keywords: [
     "tour travel",
     "paket tour",
@@ -96,11 +106,13 @@ export default function RootLayout({
       "mcTour & Travel melayani segala kebutuhan perjalanan Anda dengan pelayanan profesional, armada terbaik, dan harga kompetitif.",
     url: "https://mctourtravel.com",
     logo: "https://mctourtravel.com/logo.png",
-    telephone: "+6281234567890",
+    telephone: "+62818548833",
     address: {
       "@type": "PostalAddress",
-      addressLocality: "Jakarta",
+      streetAddress: "Mall Ambasador, Jl. Prof. DR. Satrio Lantai LG Blok A69, RT.11/RW.4, Kuningan, Karet Kuningan, Kec. Setiabudi",
+      addressLocality: "Jakarta Selatan",
       addressRegion: "DKI Jakarta",
+      postalCode: "12940",
       addressCountry: "ID",
     },
     sameAs: [

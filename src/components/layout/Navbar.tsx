@@ -42,7 +42,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <Image
-              src="/logo-mctour.jpg"
+              src="/logo-mctour.png"
               alt="mcTour & Travel"
               width={140}
               height={50}
@@ -67,7 +67,7 @@ export default function Navbar() {
           {/* CTA Button */}
           <div className="hidden lg:flex items-center gap-3">
             <a
-              href="https://wa.me/6281234567890"
+              href="https://wa.me/62818548833"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary text-sm px-5 py-2.5 inline-flex items-center gap-2"
@@ -137,7 +137,7 @@ export default function Navbar() {
                 className="pt-4"
               >
                 <a
-                  href="https://wa.me/6281234567890"
+                  href="https://wa.me/62818548833"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-primary w-full text-center block text-sm"

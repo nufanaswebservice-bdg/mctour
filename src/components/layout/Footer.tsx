@@ -80,7 +80,7 @@ export default function Footer() {
           >
             <Link href="/" className="flex items-center">
               <Image
-                src="/logo-mctour.jpg"
+                src="/logo-mctour.png"
                 alt="mcTour & Travel"
                 width={140}
                 height={50}
@@ -92,9 +92,9 @@ export default function Footer() {
               perjalanan Anda dengan pelayanan profesional.
             </p>
             <div className="space-y-2 text-sm text-dark-text/60">
-              <p>📍 Jl. Travel No. 123, Jakarta Selatan</p>
+              <p>📍 Mall Ambasador, Jl. Prof. DR. Satrio Lantai LG Blok A69, RT.11/RW.4, Kuningan, Karet Kuningan, Kec. Setiabudi, Jakarta Selatan, DKI Jakarta 12940</p>
               <p>🕐 Senin - Sabtu, 08:00 - 20:00</p>
-              <p>📞 +62 812-3456-7890</p>
+              <p>📞 0818-548-833</p>
               <p>✉️ info@mctourtravel.com</p>
             </div>
           </motion.div>

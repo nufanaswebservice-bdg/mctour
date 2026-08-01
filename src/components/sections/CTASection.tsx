@@ -48,7 +48,7 @@ export default function CTASection() {
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <a
-            href="https://wa.me/6281234567890?text=Halo%20mcTour%2C%20saya%20ingin%20booking%20perjalanan."
+            href="https://wa.me/62818548833?text=Halo%20mcTour%2C%20saya%20ingin%20booking%20perjalanan."
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-primary font-bold text-base shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"

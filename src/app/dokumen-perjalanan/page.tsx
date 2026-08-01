@@ -39,7 +39,7 @@ export default function DokumenPerjalananPage() {
         </div>
 
         <a
-          href="https://wa.me/6281234567890?text=Halo%20mcTour%2C%20saya%20butuh%20bantuan%20pengurusan%20dokumen."
+          href="https://wa.me/62818548833?text=Halo%20mcTour%2C%20saya%20butuh%20bantuan%20pengurusan%20dokumen."
           target="_blank"
           rel="noopener noreferrer"
           className="btn-secondary inline-block mt-10"

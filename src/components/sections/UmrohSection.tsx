@@ -96,7 +96,7 @@ export default function UmrohSection() {
             </div>
 
             <a
-              href="https://wa.me/6281234567890?text=Halo%20mcTour%2C%20saya%20tertarik%20paket%20umroh."
+              href="https://wa.me/62818548833?text=Halo%20mcTour%2C%20saya%20tertarik%20paket%20umroh."
               target="_blank"
               rel="noopener noreferrer"
               className={`w-full block text-center py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${

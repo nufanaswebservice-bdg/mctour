@@ -116,7 +116,7 @@ export default function InternationalTourSection() {
                   </p>
                 </div>
                 <a
-                  href={`https://wa.me/6281234567890?text=Halo%20mcTour%2C%20saya%20tertarik%20paket%20${encodeURIComponent(tour.title)}`}
+                  href={`https://wa.me/62818548833?text=Halo%20mcTour%2C%20saya%20tertarik%20paket%20${encodeURIComponent(tour.title)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-4 py-2 rounded-xl bg-secondary/10 text-secondary text-sm font-semibold hover:bg-secondary hover:text-white transition-all duration-300"

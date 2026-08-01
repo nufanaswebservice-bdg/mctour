@@ -4,10 +4,10 @@ import { motion } from "framer-motion";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 
 const contactInfo = [
-  { icon: "📱", label: "WhatsApp", value: "+62 812-3456-7890", href: "https://wa.me/6281234567890" },
-  { icon: "📞", label: "Telepon", value: "+62 21-1234-5678", href: "tel:+622112345678" },
+  { icon: "📱", label: "WhatsApp", value: "0818-548-833", href: "https://wa.me/62818548833" },
+  { icon: "📞", label: "Telepon", value: "0818-548-833", href: "tel:+62818548833" },
   { icon: "✉️", label: "Email", value: "info@mctourtravel.com", href: "mailto:info@mctourtravel.com" },
-  { icon: "📍", label: "Alamat", value: "Jl. Travel No. 123, Jakarta Selatan 12345", href: "#map" },
+  { icon: "📍", label: "Alamat", value: "Mall Ambasador, Jl. Prof. DR. Satrio Lantai LG Blok A69, Karet Kuningan, Kec. Setiabudi, Jakarta Selatan, DKI Jakarta 12940", href: "#map" },
   { icon: "🕐", label: "Jam Operasional", value: "Senin - Sabtu, 08:00 - 20:00", href: null },
 ];
 
@@ -70,7 +70,7 @@ export default function ContactContent() {
 
             {/* WhatsApp CTA */}
             <a
-              href="https://wa.me/6281234567890?text=Halo%20mcTour%2C%20saya%20ingin%20bertanya."
+              href="https://wa.me/62818548833?text=Halo%20mcTour%2C%20saya%20ingin%20bertanya."
               target="_blank"
               rel="noopener noreferrer"
               className="btn-secondary w-full text-center block mt-6"

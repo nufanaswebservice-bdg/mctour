@@ -125,7 +125,7 @@ export default async function BlogDetailPage({ params }: Props) {
             Hubungi kami untuk informasi lengkap dan penawaran terbaik.
           </p>
           <a
-            href="https://wa.me/6281234567890"
+            href="https://wa.me/62818548833"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-secondary inline-block"

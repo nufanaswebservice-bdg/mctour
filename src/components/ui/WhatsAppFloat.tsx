@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 export default function WhatsAppFloat() {
   return (
     <motion.a
-      href="https://wa.me/6281234567890?text=Halo%20mcTour%20%26%20Travel%2C%20saya%20ingin%20bertanya%20tentang%20paket%20tour."
+      href="https://wa.me/62818548833?text=Halo%20mcTour%20%26%20Travel%2C%20saya%20ingin%20bertanya%20tentang%20paket%20tour."
       target="_blank"
       rel="noopener noreferrer"
       className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-green-500 rounded-full flex items-center justify-center shadow-lg shadow-green-500/30 hover:shadow-green-500/50 hover:scale-110 transition-all duration-300"

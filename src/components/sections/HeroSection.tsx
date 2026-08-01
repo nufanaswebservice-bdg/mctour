@@ -62,7 +62,7 @@ export default function HeroSection() {
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <a
-              href="https://wa.me/6281234567890?text=Halo%20mcTour%2C%20saya%20ingin%20booking."
+              href="https://wa.me/62818548833?text=Halo%20mcTour%2C%20saya%20ingin%20booking."
               target="_blank"
               rel="noopener noreferrer"
               className="btn-secondary text-base px-8 py-4 inline-flex items-center gap-2"

@@ -33,7 +33,7 @@ export default function TiketPesawatPage() {
             </div>
           </div>
           <a
-            href="https://wa.me/6281234567890?text=Halo%20mcTour%2C%20saya%20ingin%20booking%20tiket%20pesawat."
+            href="https://wa.me/62818548833?text=Halo%20mcTour%2C%20saya%20ingin%20booking%20tiket%20pesawat."
             target="_blank"
             rel="noopener noreferrer"
             className="btn-primary w-full block text-center"

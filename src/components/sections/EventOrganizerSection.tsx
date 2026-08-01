@@ -57,7 +57,7 @@ export default function EventOrganizerSection() {
           className="text-center mt-10"
         >
           <a
-            href="https://wa.me/6281234567890?text=Halo%20mcTour%2C%20saya%20ingin%20konsultasi%20event%20organizer."
+            href="https://wa.me/62818548833?text=Halo%20mcTour%2C%20saya%20ingin%20konsultasi%20event%20organizer."
             target="_blank"
             rel="noopener noreferrer"
             className="btn-secondary inline-flex items-center gap-2"
