@@ -17,6 +17,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/faq",
     "/galeri",
     "/kontak",
+    "/wishlist",
+    "/akun",
+    "/pembayaran",
   ];
 
   const blogPosts = [
