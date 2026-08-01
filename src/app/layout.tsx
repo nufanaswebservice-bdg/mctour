@@ -1,9 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Poppins, Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import WhatsAppFloat from "@/components/ui/WhatsAppFloat";
 
 const poppins = Poppins({
   variable: "--font-heading",
@@ -18,6 +15,13 @@ const inter = Inter({
   weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#1565FF",
+};
 
 export const metadata: Metadata = {
   title: {
@@ -36,6 +40,7 @@ export const metadata: Metadata = {
       { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
     ],
   },
+  manifest: "/manifest.json",
   keywords: [
     "tour travel",
     "paket tour",
@@ -47,7 +52,6 @@ export const metadata: Metadata = {
     "tiket pesawat",
     "wisata bali",
     "wisata jogja",
-    "wisata bromo",
   ],
   authors: [{ name: "mcTour & Travel" }],
   creator: "mcTour & Travel",
@@ -61,51 +65,28 @@ export const metadata: Metadata = {
     title: "mcTour & Travel - Gathering Nyaman Bersama mcTour & Travel",
     description:
       "mcTour & Travel melayani segala kebutuhan perjalanan Anda dengan pelayanan profesional, armada terbaik, dan harga kompetitif.",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "mcTour & Travel",
-      },
-    ],
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "mcTour & Travel" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "mcTour & Travel - Gathering Nyaman Bersama mcTour & Travel",
-    description:
-      "mcTour & Travel melayani segala kebutuhan perjalanan Anda dengan pelayanan profesional, armada terbaik, dan harga kompetitif.",
+    title: "mcTour & Travel",
+    description: "Gathering Nyaman Bersama mcTour & Travel",
     images: ["/og-image.jpg"],
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-  alternates: {
-    canonical: "https://mctourtravel.com",
-  },
+  robots: { index: true, follow: true },
+  alternates: { canonical: "https://mctourtravel.com" },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "TravelAgency",
     name: "mcTour & Travel",
-    description:
-      "mcTour & Travel melayani segala kebutuhan perjalanan Anda dengan pelayanan profesional, armada terbaik, dan harga kompetitif.",
+    description: "mcTour & Travel melayani segala kebutuhan perjalanan Anda.",
     url: "https://mctourtravel.com",
-    logo: "https://mctourtravel.com/logo.png",
+    logo: "https://mctourtravel.com/logo-mctour.png",
     telephone: "+62818548833",
     address: {
       "@type": "PostalAddress",
@@ -119,7 +100,6 @@ export default function RootLayout({
       "https://instagram.com/mctourtravel",
       "https://facebook.com/mctourtravel",
       "https://tiktok.com/@mctourtravel",
-      "https://youtube.com/@mctourtravel",
     ],
     aggregateRating: {
       "@type": "AggregateRating",
@@ -135,12 +115,12 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
-      <body className="min-h-screen bg-background antialiased">
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
-        <WhatsAppFloat />
+      <body className="min-h-dvh bg-background antialiased">
+        {children}
       </body>
     </html>
   );

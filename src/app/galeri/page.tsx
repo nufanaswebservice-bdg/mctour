@@ -1,18 +1,20 @@
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
 
-const GallerySection = dynamic(() => import("@/components/sections/GallerySection"));
+const AppShell = dynamic(() => import("@/components/app/AppShell"));
+const TopBar = dynamic(() => import("@/components/app/TopBar"));
+const Gallery = dynamic(() => import("@/components/app/Gallery"));
 
 export const metadata: Metadata = {
-  title: "Galeri Perjalanan - Momen Indah Bersama Pelanggan",
-  description:
-    "Galeri foto dan video perjalanan mcTour & Travel. Lihat momen-momen indah dari pelanggan kami di berbagai destinasi.",
+  title: "Galeri Perjalanan",
+  description: "Galeri foto perjalanan mcTour & Travel. Momen indah bersama pelanggan kami.",
 };
 
 export default function GaleriPage() {
   return (
-    <div className="pt-24 pb-10">
-      <GallerySection />
-    </div>
+    <AppShell>
+      <TopBar />
+      <Gallery />
+    </AppShell>
   );
 }
