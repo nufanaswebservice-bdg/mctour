@@ -7,10 +7,11 @@ export default function HeroBanner() {
     <section className="relative h-[85vh] min-h-[500px] max-h-[700px] overflow-hidden rounded-b-[32px]">
       {/* Background slideshow simulation with gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#0057B8] via-[#003F8A] to-[#001F4D]" />
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute inset-0 bg-[url('/banner-gathering.png')] bg-cover bg-center" />
+      <div className="absolute inset-0">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/hero-gathering.png" alt="" className="w-full h-full object-cover" />
       </div>
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0057B8]/90 via-[#0057B8]/40 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0057B8]/90 via-[#0057B8]/40 to-[#0057B8]/20" />
 
       {/* Decorative elements */}
       <div className="absolute top-20 right-10 w-32 h-32 bg-[#00B4D8]/20 rounded-full blur-3xl" />
