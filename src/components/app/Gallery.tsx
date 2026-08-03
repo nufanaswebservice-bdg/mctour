@@ -47,7 +47,7 @@ export default function Gallery() {
         </a>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
         {photos.map((item, i) => (
           <motion.div
             key={item.title}
@@ -55,7 +55,7 @@ export default function Gallery() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.2, delay: i * 0.05 }}
-            className="rounded-2xl overflow-hidden aspect-square relative active:scale-[0.97] transition-transform"
+            className="rounded-2xl overflow-hidden aspect-[4/3] relative active:scale-[0.97] transition-transform"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
