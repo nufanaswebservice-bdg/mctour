@@ -1,33 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Search, MapPin, Calendar, Users } from "lucide-react";
-import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
+import { Search, MapPin, Calendar, Users, ChevronDown, Minus, Plus } from "lucide-react";
 
 export default function HeroSearch() {
   const [destination, setDestination] = useState("");
+  const [showPanel, setShowPanel] = useState(false);
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [guests, setGuests] = useState({ adults: 2, children: 0, rooms: 1 });
-  const [showGuestPicker, setShowGuestPicker] = useState(false);
-
-  const formatDate = (dateStr: string) => {
-    if (!dateStr) return "";
-    const d = new Date(dateStr);
-    return d.toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" });
-  };
-
-  const dateDisplay = checkIn && checkOut
-    ? `${formatDate(checkIn)} - ${formatDate(checkOut)}`
-    : "Pilih tanggal";
 
   const guestDisplay = `${guests.adults} dewasa, ${guests.children} anak, ${guests.rooms} kamar`;
-
-  const handleSearch = () => {
-    const msg = `Halo mcTour, saya ingin cari paket:\n- Destinasi: ${destination || "Belum dipilih"}\n- Tanggal: ${dateDisplay}\n- Tamu: ${guestDisplay}`;
-    window.open(`https://wa.me/62818548833?text=${encodeURIComponent(msg)}`, "_blank");
-  };
 
   const updateGuest = (field: keyof typeof guests, delta: number) => {
     setGuests((prev) => ({
@@ -36,9 +20,23 @@ export default function HeroSearch() {
     }));
   };
 
+  const formatDateDisplay = (dateStr: string) => {
+    if (!dateStr) return "";
+    const d = new Date(dateStr);
+    return d.toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" });
+  };
+
+  const handleSearch = () => {
+    const dateText = checkIn && checkOut
+      ? `${formatDateDisplay(checkIn)} - ${formatDateDisplay(checkOut)}`
+      : "Fleksibel";
+    const msg = `Halo mcTour, saya ingin cari paket:\n- Destinasi: ${destination || "Belum ditentukan"}\n- Tanggal: ${dateText}\n- Tamu: ${guestDisplay}`;
+    window.open(`https://wa.me/62818548833?text=${encodeURIComponent(msg)}`, "_blank");
+  };
+
   return (
     <section className="relative px-4 pt-2 pb-4 overflow-hidden">
-      {/* Gradient background blobs */}
+      {/* Background blobs */}
       <div className="absolute -top-20 -right-20 w-48 h-48 bg-primary/10 rounded-full blur-3xl" />
       <div className="absolute -bottom-10 -left-10 w-36 h-36 bg-secondary/10 rounded-full blur-3xl" />
 
@@ -55,118 +53,141 @@ export default function HeroSearch() {
         </h1>
       </motion.div>
 
-      {/* Search Bar - Traveloka Style */}
+      {/* Search Card */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.25, delay: 0.1 }}
-        className="relative glass-card p-3 space-y-2"
+        className="relative glass-card p-4"
       >
-        {/* Labels - Mobile stacked, Desktop row */}
-        <div className="hidden md:grid md:grid-cols-3 gap-2 px-1 mb-1">
-          <span className="text-[10px] text-muted font-medium">Kota, tujuan, atau nama hotel</span>
-          <span className="text-[10px] text-muted font-medium">Tanggal Check-In &amp; Check-out</span>
-          <span className="text-[10px] text-muted font-medium">Tamu dan Kamar</span>
+        {/* Destination Input */}
+        <div className="flex items-center gap-3 px-4 py-3.5 rounded-2xl bg-background/80 border border-primary/10 mb-3 focus-within:border-primary/30 focus-within:ring-2 focus-within:ring-primary/5 transition-all">
+          <MapPin size={16} className="text-primary shrink-0" />
+          <input
+            type="text"
+            value={destination}
+            onChange={(e) => setDestination(e.target.value)}
+            placeholder="Kota, hotel, tempat wisata"
+            className="w-full bg-transparent outline-none text-sm text-dark-text placeholder:text-muted/50"
+          />
         </div>
 
-        {/* Search Fields */}
-        <div className="flex flex-col md:flex-row gap-2">
-          {/* Destination */}
-          <div className="flex-1 flex items-center gap-2.5 px-3.5 py-3 rounded-2xl bg-background/80 border border-primary/10 transition-all focus-within:border-primary/30 focus-within:ring-2 focus-within:ring-primary/5">
-            <MapPin size={16} className="text-primary shrink-0" />
-            <input
-              type="text"
-              value={destination}
-              onChange={(e) => setDestination(e.target.value)}
-              placeholder="Kota, hotel, tempat wisata"
-              className="w-full bg-transparent outline-none text-sm text-dark-text placeholder:text-muted/50"
-            />
-          </div>
-
-          {/* Dates */}
-          <div className="flex-1 flex items-center gap-2.5 px-3.5 py-3 rounded-2xl bg-background/80 border border-primary/10 relative transition-all focus-within:border-primary/30 focus-within:ring-2 focus-within:ring-primary/5">
+        {/* Expandable Panel Toggle */}
+        <button
+          onClick={() => setShowPanel(!showPanel)}
+          className="w-full flex items-center justify-between px-4 py-3.5 rounded-2xl bg-background/80 border border-primary/10 mb-3 active:bg-primary/5 transition-colors"
+        >
+          <div className="flex items-center gap-3">
             <Calendar size={16} className="text-primary shrink-0" />
-            <div className="flex gap-1 items-center w-full">
-              <input
-                type="date"
-                value={checkIn}
-                onChange={(e) => setCheckIn(e.target.value)}
-                className="w-full bg-transparent outline-none text-sm text-dark-text [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer"
-              />
-              <span className="text-muted text-xs shrink-0">-</span>
-              <input
-                type="date"
-                value={checkOut}
-                onChange={(e) => setCheckOut(e.target.value)}
-                className="w-full bg-transparent outline-none text-sm text-dark-text [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer"
-              />
-            </div>
-            {!checkIn && !checkOut && (
-              <span className="absolute left-10 text-sm text-muted/50 pointer-events-none">Pilih tanggal</span>
-            )}
+            <span className="text-sm text-dark-text/70">
+              {checkIn && checkOut
+                ? `${formatDateDisplay(checkIn)} - ${formatDateDisplay(checkOut)}`
+                : "Tanggal & Jumlah Tamu"
+              }
+            </span>
           </div>
+          <motion.div animate={{ rotate: showPanel ? 180 : 0 }} transition={{ duration: 0.2 }}>
+            <ChevronDown size={16} className="text-muted" />
+          </motion.div>
+        </button>
 
-          {/* Guests */}
-          <div className="flex-1 relative">
-            <button
-              onClick={() => setShowGuestPicker(!showGuestPicker)}
-              className="w-full flex items-center gap-2.5 px-3.5 py-3 rounded-2xl bg-background/80 border border-primary/10 text-left transition-all active:border-primary/30"
+        {/* Expandable Panel */}
+        <AnimatePresence>
+          {showPanel && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="overflow-hidden"
             >
-              <Users size={16} className="text-primary shrink-0" />
-              <span className="text-sm text-dark-text truncate">{guestDisplay}</span>
-            </button>
-
-            {/* Guest Picker Dropdown */}
-            {showGuestPicker && (
-              <motion.div
-                initial={{ opacity: 0, y: -5 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="absolute top-full left-0 right-0 mt-2 p-4 rounded-2xl bg-white shadow-xl border border-primary/10 z-50 space-y-3"
-              >
-                {[
-                  { label: "Dewasa", field: "adults" as const, min: 1 },
-                  { label: "Anak", field: "children" as const, min: 0 },
-                  { label: "Kamar", field: "rooms" as const, min: 1 },
-                ].map((item) => (
-                  <div key={item.field} className="flex items-center justify-between">
-                    <span className="text-xs font-medium text-dark-text">{item.label}</span>
-                    <div className="flex items-center gap-3">
-                      <button
-                        onClick={() => updateGuest(item.field, -1)}
-                        className="w-8 h-8 rounded-full border border-primary/20 flex items-center justify-center text-primary text-sm font-bold active:scale-90 transition-transform disabled:opacity-30"
-                        disabled={guests[item.field] <= item.min}
-                      >
-                        −
-                      </button>
-                      <span className="text-sm font-bold text-dark-text w-4 text-center">{guests[item.field]}</span>
-                      <button
-                        onClick={() => updateGuest(item.field, 1)}
-                        className="w-8 h-8 rounded-full border border-primary/20 flex items-center justify-center text-primary text-sm font-bold active:scale-90 transition-transform"
-                      >
-                        +
-                      </button>
+              <div className="space-y-3 pb-3">
+                {/* Date Selection */}
+                <div className="rounded-2xl bg-background/60 border border-primary/5 p-3">
+                  <p className="text-[10px] text-muted font-medium mb-2 uppercase tracking-wide">Tanggal Perjalanan</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="text-[10px] text-muted block mb-1">Check-in</label>
+                      <input
+                        type="date"
+                        value={checkIn}
+                        onChange={(e) => setCheckIn(e.target.value)}
+                        className="w-full px-3 py-2.5 rounded-xl bg-white border border-primary/10 text-xs text-dark-text outline-none focus:border-primary/30 transition-colors"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-muted block mb-1">Check-out</label>
+                      <input
+                        type="date"
+                        value={checkOut}
+                        onChange={(e) => setCheckOut(e.target.value)}
+                        min={checkIn}
+                        className="w-full px-3 py-2.5 rounded-xl bg-white border border-primary/10 text-xs text-dark-text outline-none focus:border-primary/30 transition-colors"
+                      />
                     </div>
                   </div>
-                ))}
-                <button
-                  onClick={() => setShowGuestPicker(false)}
-                  className="w-full py-2 rounded-xl bg-primary/10 text-primary text-xs font-bold active:scale-95 transition-transform"
-                >
-                  Selesai
-                </button>
-              </motion.div>
-            )}
-          </div>
+                </div>
 
-          {/* Search Button */}
-          <button
-            onClick={handleSearch}
-            className="md:w-12 md:h-auto h-12 rounded-2xl bg-gradient-to-r from-secondary to-secondary-light flex items-center justify-center gap-2 shadow-lg shadow-secondary/20 active:scale-95 transition-transform"
-          >
-            <Search size={18} className="text-white" />
-            <span className="text-white text-sm font-bold md:hidden">Cari</span>
-          </button>
-        </div>
+                {/* Guest Selection */}
+                <div className="rounded-2xl bg-background/60 border border-primary/5 p-3">
+                  <p className="text-[10px] text-muted font-medium mb-3 uppercase tracking-wide">Tamu & Kamar</p>
+                  <div className="space-y-3">
+                    {[
+                      { label: "Dewasa", field: "adults" as const, min: 1, note: "12+ tahun" },
+                      { label: "Anak", field: "children" as const, min: 0, note: "2-11 tahun" },
+                      { label: "Kamar", field: "rooms" as const, min: 1, note: "" },
+                    ].map((item) => (
+                      <div key={item.field} className="flex items-center justify-between">
+                        <div>
+                          <span className="text-xs font-medium text-dark-text">{item.label}</span>
+                          {item.note && <span className="text-[9px] text-muted ml-1.5">({item.note})</span>}
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <button
+                            onClick={() => updateGuest(item.field, -1)}
+                            disabled={guests[item.field] <= item.min}
+                            className="w-8 h-8 rounded-full border border-primary/20 flex items-center justify-center text-primary active:scale-90 transition-transform disabled:opacity-30 disabled:active:scale-100"
+                          >
+                            <Minus size={14} />
+                          </button>
+                          <span className="text-sm font-bold text-dark-text w-5 text-center">
+                            {guests[item.field]}
+                          </span>
+                          <button
+                            onClick={() => updateGuest(item.field, 1)}
+                            className="w-8 h-8 rounded-full border border-primary/20 flex items-center justify-center text-primary active:scale-90 transition-transform"
+                          >
+                            <Plus size={14} />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Summary */}
+                <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-primary/5">
+                  <Users size={12} className="text-primary" />
+                  <span className="text-[11px] text-primary font-medium">{guestDisplay}</span>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Search Button - Animated gradient blue */}
+        <motion.button
+          onClick={handleSearch}
+          whileTap={{ scale: 0.97 }}
+          className="relative w-full h-12 rounded-2xl overflow-hidden shadow-lg shadow-primary/25"
+        >
+          {/* Animated gradient */}
+          <div className="absolute inset-0 animate-gradient-shift bg-[length:200%_100%] bg-gradient-to-r from-[#0A2E7A] via-[#1565FF] to-[#4D8AFF]" />
+          <span className="relative z-10 flex items-center justify-center gap-2 text-white font-bold text-sm">
+            <Search size={16} />
+            Cari Paket Tour
+          </span>
+        </motion.button>
       </motion.div>
     </section>
   );
