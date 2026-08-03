@@ -23,28 +23,11 @@ export default function HeroSearch() {
         </h1>
       </motion.div>
 
-      {/* Banner */}
-      <motion.div
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.25, delay: 0.1 }}
-        className="relative rounded-3xl overflow-hidden"
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/banner-mctour.png"
-          alt="mcTour & Travel Banner"
-          className="w-full h-auto rounded-3xl"
-          loading="eager"
-        />
-      </motion.div>
-
       {/* CTA Button */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.25, delay: 0.2 }}
-        className="mt-4"
+        transition={{ duration: 0.25, delay: 0.1 }}
       >
         <Link href="/paket-tour-domestik" className="btn-primary w-full text-sm">
           Cari Paket Tour
