@@ -7,8 +7,11 @@ export default function HeroBanner() {
   return (
     <section className="relative h-[55vh] min-h-[320px] max-h-[450px] overflow-hidden rounded-b-[32px]">
       <div className="absolute inset-0 bg-gradient-to-br from-[#1a237e] via-[#283593] to-[#0d47a1]" />
-      <div className="absolute inset-0 opacity-15 bg-[url('/banner-mctour.png')] bg-cover bg-center" />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#1a237e]/90 via-transparent to-transparent" />
+      <div className="absolute inset-0">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/hero-rental.png" alt="" className="w-full h-full object-cover" />
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-t from-[#1a237e]/90 via-[#1a237e]/40 to-[#1a237e]/20" />
 
       {/* Decorative */}
       <div className="absolute top-16 right-6 w-24 h-24 bg-blue-400/10 rounded-full blur-2xl" />
