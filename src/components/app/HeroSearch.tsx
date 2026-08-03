@@ -1,16 +1,19 @@
 "use client";
 
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, MapPin, Calendar, Users, ChevronDown, Minus, Plus } from "lucide-react";
 
 export default function HeroSearch() {
+  const { data: session } = useSession();
   const [destination, setDestination] = useState("");
   const [showPanel, setShowPanel] = useState(false);
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [guests, setGuests] = useState({ adults: 2, children: 0, rooms: 1 });
 
+  const firstName = session?.user?.name?.split(" ")[0] || "";
   const guestDisplay = `${guests.adults} dewasa, ${guests.children} anak, ${guests.rooms} kamar`;
 
   const updateGuest = (field: keyof typeof guests, delta: number) => {
@@ -47,7 +50,9 @@ export default function HeroSearch() {
         transition={{ duration: 0.25 }}
         className="relative mb-4"
       >
-        <p className="text-muted text-sm font-medium">Hai, Selamat Datang 👋</p>
+        <p className="text-muted text-sm font-medium">
+          {firstName ? `Hai ${firstName} 👋` : "Hai, Selamat Datang 👋"}
+        </p>
         <h1 className="text-2xl md:text-3xl font-bold font-[family-name:var(--font-heading)] text-dark-text mt-1">
           Mau Liburan <span className="gradient-text">Kemana?</span>
         </h1>

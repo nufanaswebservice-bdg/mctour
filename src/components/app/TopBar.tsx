@@ -126,7 +126,14 @@ export default function TopBar() {
       {/* Modals */}
       <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} onSuccess={refresh} />
       <NotificationPanel isOpen={showNotifs} onClose={() => setShowNotifs(false)} notifications={notifications} onRefresh={refresh} />
-      <ProfilePanel isOpen={showProfile} onClose={() => setShowProfile(false)} user={user} onLogout={refresh} onLoginClick={() => { setShowProfile(false); setShowAuth(true); }} />
+      <ProfilePanel
+        isOpen={showProfile}
+        onClose={() => setShowProfile(false)}
+        user={user}
+        googleUser={session?.user || null}
+        onLogout={refresh}
+        onLoginClick={() => { setShowProfile(false); window.location.href = "/login"; }}
+      />
     </>
   );
 }
