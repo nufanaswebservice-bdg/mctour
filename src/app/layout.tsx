@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Poppins, Inter } from "next/font/google";
 import "./globals.css";
+import SplashScreen from "@/components/app/SplashScreen";
 
 const poppins = Poppins({
   variable: "--font-heading",
@@ -120,6 +121,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body className="min-h-dvh bg-background antialiased">
+        <SplashScreen />
         {children}
       </body>
     </html>
