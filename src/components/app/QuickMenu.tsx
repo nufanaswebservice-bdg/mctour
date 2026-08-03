@@ -18,7 +18,7 @@ const menus = [
   { icon: Globe, label: "Luar Negeri", color: "text-blue-600", bg: "bg-blue-50", href: "/paket-tour-luar-negeri" },
   { icon: Users, label: "Gathering", color: "text-orange-600", bg: "bg-orange-50", href: "/event-organizer" },
   { icon: GraduationCap, label: "Umroh/Haji", color: "text-purple-600", bg: "bg-purple-50", href: "/umroh-haji" },
-  { icon: Bus, label: "Rental Bus", color: "text-red-600", bg: "bg-red-50", href: "/rental-bus" },
+  { icon: Bus, label: "Rental", color: "text-red-600", bg: "bg-red-50", href: "/rental-kendaraan" },
   { icon: Building, label: "Hotel", color: "text-cyan-600", bg: "bg-cyan-50", href: "/hotel" },
   { icon: Plane, label: "Pesawat", color: "text-indigo-600", bg: "bg-indigo-50", href: "/tiket-pesawat" },
   { icon: FileText, label: "Visa", color: "text-pink-600", bg: "bg-pink-50", href: "/visa" },
