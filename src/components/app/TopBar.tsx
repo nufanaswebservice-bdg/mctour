@@ -51,7 +51,7 @@ export default function TopBar() {
       >
         <div className="flex items-center justify-between px-4 h-16 max-w-7xl mx-auto">
           {/* Logo */}
-          <Link href="/">
+          <Link href="/" className="shrink-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/logo-mctour.png"
@@ -59,6 +59,13 @@ export default function TopBar() {
               className="h-11 w-auto object-contain"
             />
           </Link>
+
+          {/* Brand Text - Center */}
+          <div className="flex-1 text-center px-2">
+            <span className="text-sm md:text-base font-bold font-[family-name:var(--font-heading)] text-primary tracking-tight">
+              MCTOUR <span className="text-dark-text">&amp; TRAVEL</span>
+            </span>
+          </div>
 
           {/* Actions */}
           <div className="flex items-center gap-1">
