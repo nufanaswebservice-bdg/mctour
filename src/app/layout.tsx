@@ -98,7 +98,8 @@ export default function RootLayout({
       addressCountry: "ID",
     },
     sameAs: [
-      "https://instagram.com/mctourtravel",
+      "https://www.instagram.com/mctourtravel/",
+      "https://www.youtube.com/@mctourtravel",
       "https://facebook.com/mctourtravel",
       "https://tiktok.com/@mctourtravel",
     ],
