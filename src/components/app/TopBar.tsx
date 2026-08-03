@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Bell, Heart, User } from "lucide-react";
+import { Bell, Heart, User, LogOut } from "lucide-react";
 import { getStoredAuth, User as UserType } from "@/lib/auth";
 import { getNotifications, getUnreadCount, getWishlist, Notification } from "@/lib/store";
 import AuthModal from "./AuthModal";
@@ -11,6 +12,7 @@ import NotificationPanel from "./NotificationPanel";
 import ProfilePanel from "./ProfilePanel";
 
 export default function TopBar() {
+  const { data: session } = useSession();
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState<UserType | null>(null);
   const [unread, setUnread] = useState(0);
@@ -21,6 +23,11 @@ export default function TopBar() {
   const [showAuth, setShowAuth] = useState(false);
   const [showNotifs, setShowNotifs] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+
+  const isLoggedIn = !!session?.user || !!user;
+  const displayName = session?.user?.name || user?.name || "";
+  const displayInitial = displayName ? displayName.charAt(0).toUpperCase() : "";
+  const avatarUrl = session?.user?.image || null;
 
   const refresh = () => {
     const auth = getStoredAuth();
@@ -99,14 +106,15 @@ export default function TopBar() {
 
             {/* Profile */}
             <button
-              onClick={() => user ? setShowProfile(true) : setShowAuth(true)}
-              className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center active:scale-95 transition-all"
+              onClick={() => isLoggedIn ? setShowProfile(true) : (window.location.href = "/login")}
+              className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center active:scale-95 transition-all overflow-hidden"
               aria-label="Profile"
             >
-              {user ? (
-                <span className="text-xs font-bold text-primary">
-                  {user.name.charAt(0).toUpperCase()}
-                </span>
+              {avatarUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={avatarUrl} alt="" className="w-full h-full object-cover" />
+              ) : displayInitial ? (
+                <span className="text-xs font-bold text-primary">{displayInitial}</span>
               ) : (
                 <User size={17} className="text-primary" />
               )}
