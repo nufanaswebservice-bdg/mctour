@@ -13,6 +13,7 @@ const Testimonials = dynamic(() => import("@/components/app/Testimonials"));
 const Gallery = dynamic(() => import("@/components/app/Gallery"));
 const FAQ = dynamic(() => import("@/components/app/FAQ"));
 const CTABanner = dynamic(() => import("@/components/app/CTABanner"));
+const ActivitiesWidget = dynamic(() => import("@/components/app/ActivitiesWidget"));
 
 export default function Home() {
   return (
@@ -24,6 +25,7 @@ export default function Home() {
       <DomesticPackages />
       <InternationalPackages />
       <WhyChooseUs />
+      <ActivitiesWidget />
       <Statistics />
       <Testimonials />
       <Gallery />
