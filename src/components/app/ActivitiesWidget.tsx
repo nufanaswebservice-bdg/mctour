@@ -12,7 +12,7 @@ export default function ActivitiesWidget() {
     const script = document.createElement("script");
     script.async = true;
     script.charset = "utf-8";
-    script.src = "https://tpwdg.com/content?currency=IDR&trs=558445&shmarker=760307&locale=id&city_id=45&category=2&amount=6&powered_by=true&campaign_id=137&promo_id=4497";
+    script.src = "https://tpwdg.com/content?currency=IDR&trs=558445&shmarker=760307&locale=id&city_id=8&category=2&amount=3&powered_by=true&campaign_id=137&promo_id=4497";
     
     if (widgetRef.current) {
       widgetRef.current.appendChild(script);
