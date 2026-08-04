@@ -178,6 +178,16 @@
   animation: gradient-shift 3s ease infinite;
 }
 
+/* Running text marquee */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.33%); }
+}
+
+.animate-marquee {
+  animation: marquee 15s linear infinite;
+}
+
 /* Skeleton loading */
 @keyframes shimmer {
   0% { background-position: -200% 0; }
