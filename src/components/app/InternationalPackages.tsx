@@ -54,14 +54,14 @@ export default function InternationalPackages() {
         </Link>
       </div>
 
-      {/* Horizontal cards */}
-      <div className="flex gap-3 overflow-x-auto hide-scrollbar px-4 snap-x-mandatory">
+      {/* Cards Grid - 2 columns on mobile */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 px-4">
         {packages.map((pkg) => (
-          <div key={pkg.id} className="flex-shrink-0 w-[220px] md:w-[240px] snap-start">
+          <div key={pkg.id}>
             <Link href={`/tour-intl/${pkg.slug}`} className="block">
-              <div className="glass-card overflow-hidden active:scale-[0.98] transition-transform">
+              <div className="glass-card overflow-hidden active:scale-[0.98] transition-transform h-full">
                 {/* Image */}
-                <div className="relative h-36 overflow-hidden rounded-t-[24px]">
+                <div className="relative h-28 sm:h-36 overflow-hidden rounded-t-[24px]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={pkg.image}
@@ -70,40 +70,38 @@ export default function InternationalPackages() {
                     loading="lazy"
                   />
                   {pkg.badge && (
-                    <span className="absolute top-2 left-2 px-2 py-0.5 rounded-lg bg-secondary text-white text-[10px] font-bold">
+                    <span className="absolute top-2 left-2 px-2 py-0.5 rounded-lg bg-secondary text-white text-[9px] font-bold">
                       {pkg.badge}
                     </span>
                   )}
                   <div className="absolute top-2 right-2 flex items-center gap-0.5 px-1.5 py-0.5 rounded-lg bg-white/90 backdrop-blur-sm">
-                    <Star size={10} className="text-yellow-500 fill-yellow-500" />
-                    <span className="text-[10px] font-bold">{pkg.rating}</span>
+                    <Star size={9} className="text-yellow-500 fill-yellow-500" />
+                    <span className="text-[9px] font-bold">{pkg.rating}</span>
                   </div>
                   <button
                     onClick={(e) => toggleWishlist(pkg, e)}
-                    className="absolute bottom-2 right-2 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center active:scale-90 transition-transform"
+                    className="absolute bottom-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center active:scale-90 transition-transform"
                   >
-                    <Heart size={14} className={wishlistState[pkg.id] ? "text-red-500 fill-red-500" : "text-dark-text/40"} />
+                    <Heart size={12} className={wishlistState[pkg.id] ? "text-red-500 fill-red-500" : "text-dark-text/40"} />
                   </button>
                 </div>
 
                 {/* Content */}
-                <div className="p-3">
-                  <div className="flex items-center gap-1.5 mb-1">
-                    <span className="text-base">{pkg.flag}</span>
-                    <h3 className="text-sm font-bold text-dark-text font-[family-name:var(--font-heading)] truncate">
+                <div className="p-2.5">
+                  <div className="flex items-center gap-1 mb-0.5">
+                    <span className="text-sm">{pkg.flag}</span>
+                    <h3 className="text-xs font-bold text-dark-text font-[family-name:var(--font-heading)] truncate">
                       {pkg.name}
                     </h3>
                   </div>
-                  <div className="flex items-center gap-2 text-[11px] text-muted mb-2">
-                    <span className="flex items-center gap-0.5"><Clock size={10} /> {pkg.duration}</span>
-                    <span>·</span>
-                    <span>{pkg.airline}</span>
+                  <div className="flex items-center gap-1 text-[10px] text-muted">
+                    <Clock size={9} /> {pkg.duration} · {pkg.airline}
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] text-muted line-through">{pkg.originalPrice}</span>
-                    <span className="text-sm font-bold text-primary">{pkg.price}</span>
+                  <div className="flex items-center gap-1.5 mt-1.5">
+                    <span className="text-[9px] text-muted line-through">{pkg.originalPrice}</span>
+                    <span className="text-xs font-bold text-primary">{pkg.price}</span>
                   </div>
-                  <div className="mt-2 py-2 rounded-xl bg-primary/10 text-primary text-xs font-bold text-center">
+                  <div className="mt-2 py-1.5 rounded-xl bg-primary/10 text-primary text-[10px] font-bold text-center">
                     Lihat Detail
                   </div>
                 </div>

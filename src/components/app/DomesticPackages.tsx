@@ -55,14 +55,14 @@ export default function DomesticPackages() {
         </Link>
       </div>
 
-      {/* Horizontal Scroll Cards */}
-      <div className="flex gap-3 overflow-x-auto hide-scrollbar px-4 snap-x-mandatory">
+      {/* Cards Grid - 2 columns on mobile, no horizontal scroll */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 px-4">
         {packages.map((pkg) => (
-          <div key={pkg.id} className="flex-shrink-0 w-[200px] md:w-[220px] snap-start">
+          <div key={pkg.id}>
             <Link href={`/tour/${pkg.slug}`} className="block">
-              <div className="glass-card overflow-hidden active:scale-[0.98] transition-transform">
+              <div className="glass-card overflow-hidden active:scale-[0.98] transition-transform h-full">
                 {/* Image */}
-                <div className="relative h-32 overflow-hidden rounded-t-[24px]">
+                <div className="relative h-28 sm:h-32 overflow-hidden rounded-t-[24px]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={pkg.image}
@@ -71,41 +71,41 @@ export default function DomesticPackages() {
                     loading="lazy"
                   />
                   {pkg.badge && (
-                    <span className="absolute top-2 left-2 px-2 py-0.5 rounded-lg bg-secondary text-white text-[10px] font-bold">
+                    <span className="absolute top-2 left-2 px-2 py-0.5 rounded-lg bg-secondary text-white text-[9px] font-bold">
                       {pkg.badge}
                     </span>
                   )}
                   <div className="absolute top-2 right-2 flex items-center gap-0.5 px-1.5 py-0.5 rounded-lg bg-white/90 backdrop-blur-sm">
-                    <Star size={10} className="text-yellow-500 fill-yellow-500" />
-                    <span className="text-[10px] font-bold">{pkg.rating}</span>
+                    <Star size={9} className="text-yellow-500 fill-yellow-500" />
+                    <span className="text-[9px] font-bold">{pkg.rating}</span>
                   </div>
                   {/* Wishlist button */}
                   <button
                     onClick={(e) => toggleWishlist(pkg, e)}
-                    className="absolute bottom-2 right-2 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center active:scale-90 transition-transform"
+                    className="absolute bottom-2 right-2 w-7 h-7 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center active:scale-90 transition-transform"
                   >
                     <Heart
-                      size={14}
+                      size={12}
                       className={wishlistState[pkg.id] ? "text-red-500 fill-red-500" : "text-dark-text/40"}
                     />
                   </button>
                 </div>
 
                 {/* Content */}
-                <div className="p-3">
-                  <h3 className="text-sm font-bold text-dark-text font-[family-name:var(--font-heading)] truncate">
+                <div className="p-2.5">
+                  <h3 className="text-xs font-bold text-dark-text font-[family-name:var(--font-heading)] truncate">
                     {pkg.name}
                   </h3>
-                  <div className="flex items-center gap-1 mt-1">
-                    <MapPin size={11} className="text-muted" />
-                    <span className="text-[11px] text-muted">{pkg.location}</span>
-                    <span className="text-[11px] text-muted ml-auto">{pkg.duration}</span>
+                  <div className="flex items-center gap-1 mt-0.5">
+                    <MapPin size={9} className="text-muted" />
+                    <span className="text-[10px] text-muted truncate">{pkg.location}</span>
+                    <span className="text-[10px] text-muted ml-auto">{pkg.duration}</span>
                   </div>
-                  <div className="flex items-center gap-2 mt-2">
-                    <span className="text-[10px] text-muted line-through">{pkg.originalPrice}</span>
-                    <span className="text-sm font-bold text-primary">{pkg.price}</span>
+                  <div className="flex items-center gap-1.5 mt-1.5">
+                    <span className="text-[9px] text-muted line-through">{pkg.originalPrice}</span>
+                    <span className="text-xs font-bold text-primary">{pkg.price}</span>
                   </div>
-                  <div className="mt-2 py-2 rounded-xl bg-primary/10 text-primary text-xs font-bold text-center">
+                  <div className="mt-2 py-1.5 rounded-xl bg-primary/10 text-primary text-[10px] font-bold text-center">
                     Lihat Detail
                   </div>
                 </div>
