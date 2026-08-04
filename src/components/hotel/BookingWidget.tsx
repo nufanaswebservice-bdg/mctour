@@ -1,38 +1,41 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Star, MapPin } from "lucide-react";
 
 /**
- * Booking.com Affiliate Widget Integration
+ * Booking.com Affiliate Integration - Fast Loading Version
+ * Menggunakan direct affiliate links (tanpa widget script yang lambat)
  * 
- * Untuk mendapatkan Affiliate ID:
- * 1. Daftar di https://www.booking.com/affiliate-program.html
- * 2. Setelah approve, dapatkan Affiliate ID (aid)
- * 3. Ganti AFFILIATE_ID di bawah dengan ID Anda
- * 
- * Komisi: 25-40% dari fee Booking.com per booking
+ * Affiliate ID: 2607284 (ganti dengan ID Anda setelah daftar)
+ * Komisi: 25-40% dari fee Booking.com
  */
 
-const AFFILIATE_ID = "2607284"; // Ganti dengan affiliate ID Anda setelah daftar
+const AFFILIATE_ID = "2607284";
+
+const featuredHotels = [
+  { name: "The Mulia Bali", location: "Nusa Dua, Bali", rating: 9.4, price: "2.850.000", discount: 32, stars: 5, search: "Nusa+Dua" },
+  { name: "Padma Resort Ubud", location: "Ubud, Bali", rating: 9.2, price: "1.950.000", discount: 30, stars: 5, search: "Ubud" },
+  { name: "Ayana Resort", location: "Jimbaran, Bali", rating: 9.3, price: "2.100.000", discount: 40, stars: 5, search: "Jimbaran" },
+  { name: "The Trans Luxury", location: "Bandung", rating: 9.1, price: "1.200.000", discount: 33, stars: 5, search: "Bandung" },
+  { name: "Hotel Tentrem", location: "Yogyakarta", rating: 9.5, price: "1.650.000", discount: 25, stars: 5, search: "Yogyakarta" },
+  { name: "The Westin Jakarta", location: "Jakarta", rating: 8.9, price: "1.450.000", discount: 31, stars: 5, search: "Jakarta" },
+];
+
+const quickCities = [
+  { city: "Bali", emoji: "🏝️" },
+  { city: "Jakarta", emoji: "🏙️" },
+  { city: "Bandung", emoji: "🏔️" },
+  { city: "Yogyakarta", emoji: "🏯" },
+  { city: "Singapore", emoji: "🇸🇬" },
+  { city: "Bangkok", emoji: "🇹🇭" },
+  { city: "Tokyo", emoji: "🇯🇵" },
+  { city: "Seoul", emoji: "🇰🇷" },
+];
 
 export default function BookingWidget() {
-  const widgetRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    // Load Booking.com affiliate script
-    const script = document.createElement("script");
-    script.src = "https://www.booking.com/affiliate/script.html";
-    script.async = true;
-    document.body.appendChild(script);
-
-    return () => {
-      // Cleanup
-      const existingScript = document.querySelector('script[src*="booking.com/affiliate"]');
-      if (existingScript) existingScript.remove();
-    };
-  }, []);
+  const affiliateLink = (search: string) =>
+    `https://www.booking.com/searchresults.html?aid=${AFFILIATE_ID}&ss=${encodeURIComponent(search)}&lang=id&selected_currency=IDR`;
 
   return (
     <motion.section
@@ -44,111 +47,78 @@ export default function BookingWidget() {
       <div className="flex items-center justify-between mb-4">
         <div>
           <h2 className="text-lg font-bold font-[family-name:var(--font-heading)] text-dark-text">
-            Booking Hotel Online
+            Booking Hotel
           </h2>
-          <p className="text-xs text-muted mt-0.5">Powered by Booking.com — Harga terbaik, bayar di hotel</p>
+          <p className="text-xs text-muted mt-0.5">Harga terbaik, bayar di hotel</p>
         </div>
         <a
-          href={`https://www.booking.com/index.html?aid=${AFFILIATE_ID}`}
+          href={`https://www.booking.com/index.html?aid=${AFFILIATE_ID}&lang=id`}
           target="_blank"
           rel="noopener noreferrer"
           className="text-[10px] text-primary font-semibold flex items-center gap-0.5"
         >
-          Booking.com <ExternalLink size={10} />
+          Lihat Semua <ExternalLink size={10} />
         </a>
       </div>
 
-      {/* Booking.com Search Widget */}
-      <div className="glass-card p-4 rounded-3xl overflow-hidden">
-        <div ref={widgetRef}>
-          {/* Booking.com Searchbox Widget */}
-          <ins
-            className="bookingaff"
-            data-aid={AFFILIATE_ID}
-            data-target_aid={AFFILIATE_ID}
-            data-prod="searchbox"
-            data-width="100%"
-            data-lang="id"
-            data-dest_type="city"
-            data-currency="IDR"
-            data-checkin=""
-            data-checkout=""
-            data-num_adults="2"
-            data-num_rooms="1"
-            data-num_children="0"
+      {/* Quick City Search */}
+      <div className="flex gap-2 overflow-x-auto hide-scrollbar mb-4 pb-1">
+        {quickCities.map((item) => (
+          <a
+            key={item.city}
+            href={affiliateLink(item.city)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-primary/5 whitespace-nowrap active:scale-95 transition-transform"
           >
-            {/* Fallback while loading */}
-            <div className="space-y-3">
-              <div className="skeleton h-12 w-full" />
-              <div className="grid grid-cols-2 gap-2">
-                <div className="skeleton h-10 w-full" />
-                <div className="skeleton h-10 w-full" />
+            <span className="text-sm">{item.emoji}</span>
+            <span className="text-[11px] font-medium text-dark-text">{item.city}</span>
+          </a>
+        ))}
+      </div>
+
+      {/* Hotel Cards - Instant Load */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {featuredHotels.map((hotel, i) => (
+          <motion.a
+            key={hotel.name}
+            href={affiliateLink(hotel.search)}
+            target="_blank"
+            rel="noopener noreferrer"
+            initial={{ opacity: 0, y: 8 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.05 }}
+            className="glass-card p-3 active:scale-[0.98] transition-transform block"
+          >
+            <div className="flex items-start justify-between mb-2">
+              <div className="flex-1 min-w-0">
+                <h3 className="text-xs font-bold text-dark-text truncate">{hotel.name}</h3>
+                <div className="flex items-center gap-1 mt-0.5">
+                  <MapPin size={9} className="text-muted shrink-0" />
+                  <span className="text-[10px] text-muted truncate">{hotel.location}</span>
+                </div>
               </div>
-              <div className="skeleton h-10 w-full" />
-              <div className="skeleton h-12 w-full" />
+              <div className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-lg bg-primary/10 shrink-0 ml-2">
+                <Star size={9} className="text-primary fill-primary" />
+                <span className="text-[10px] font-bold text-primary">{hotel.rating}</span>
+              </div>
             </div>
-          </ins>
-        </div>
-      </div>
-
-      {/* Direct Search Links by City */}
-      <div className="mt-4">
-        <p className="text-xs font-semibold text-dark-text mb-3">Cari Hotel Populer:</p>
-        <div className="grid grid-cols-2 gap-2">
-          {[
-            { city: "Bali", dest_id: "-2701757" },
-            { city: "Jakarta", dest_id: "-2679652" },
-            { city: "Bandung", dest_id: "-2679013" },
-            { city: "Yogyakarta", dest_id: "-2701944" },
-            { city: "Surabaya", dest_id: "-2700856" },
-            { city: "Malang", dest_id: "-2690783" },
-            { city: "Singapore", dest_id: "-73635" },
-            { city: "Bangkok", dest_id: "-3414440" },
-          ].map((item) => (
-            <a
-              key={item.city}
-              href={`https://www.booking.com/searchresults.html?aid=${AFFILIATE_ID}&ss=${encodeURIComponent(item.city)}&lang=id&selected_currency=IDR`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-3 py-2.5 rounded-2xl bg-primary/5 active:bg-primary/10 active:scale-[0.98] transition-all"
-            >
-              <span className="text-xs font-medium text-dark-text">{item.city}</span>
-              <ExternalLink size={10} className="text-primary ml-auto" />
-            </a>
-          ))}
-        </div>
-      </div>
-
-      {/* Deals Widget */}
-      <div className="mt-6">
-        <h3 className="text-sm font-bold font-[family-name:var(--font-heading)] text-dark-text mb-3">
-          🔥 Deals Hari Ini
-        </h3>
-        <div className="rounded-3xl overflow-hidden border border-primary/5">
-          <ins
-            className="bookingaff"
-            data-aid={AFFILIATE_ID}
-            data-target_aid={AFFILIATE_ID}
-            data-prod="dfl2"
-            data-width="100%"
-            data-lang="id"
-            data-currency="IDR"
-            data-dest_type="city"
-            data-dest_id="-2701757"
-            data-num_properties="4"
-          >
-            <div className="p-4 space-y-3">
-              <div className="skeleton h-24 w-full" />
-              <div className="skeleton h-24 w-full" />
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-xs font-bold text-primary">Rp {hotel.price}</span>
+                <span className="text-[9px] text-muted ml-1">/malam</span>
+              </div>
+              <span className="px-1.5 py-0.5 rounded-md bg-red-50 text-red-600 text-[9px] font-bold">-{hotel.discount}%</span>
             </div>
-          </ins>
-        </div>
+          </motion.a>
+        ))}
       </div>
 
       {/* Info */}
-      <div className="mt-4 p-3 rounded-2xl bg-blue-50/50 border border-blue-100">
-        <p className="text-[10px] text-blue-800 leading-relaxed">
-          💡 Anda akan diarahkan ke Booking.com untuk menyelesaikan pemesanan. Harga yang ditampilkan sudah termasuk pajak. Banyak hotel menawarkan gratis pembatalan dan bayar di hotel.
+      <div className="mt-3 p-2.5 rounded-xl bg-blue-50/50 border border-blue-100">
+        <p className="text-[9px] text-blue-700 leading-relaxed text-center">
+          💡 Klik hotel untuk melihat harga & ketersediaan di Booking.com. Gratis pembatalan & bayar di hotel.
         </p>
       </div>
     </motion.section>
