@@ -27,7 +27,7 @@ export default function GalleryGrid() {
       <h2 className="text-lg font-bold font-[family-name:var(--font-heading)] text-dark-text mb-1">Galeri Event</h2>
       <p className="text-xs text-muted mb-4">Dokumentasi gathering kami</p>
 
-      <div className="grid grid-cols-2 gap-3 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
         {photos.map((item, i) => (
           <motion.div
             key={item.title}
@@ -35,7 +35,7 @@ export default function GalleryGrid() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.05 }}
-            className="rounded-2xl overflow-hidden aspect-square relative active:scale-[0.97] transition-transform"
+            className="rounded-2xl overflow-hidden aspect-[4/3] relative active:scale-[0.97] transition-transform"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={item.image} alt={item.title} className="w-full h-full object-cover" loading="lazy" />

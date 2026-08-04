@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Poppins, Inter } from "next/font/google";
 import "./globals.css";
 import SplashScreen from "@/components/app/SplashScreen";
+import PromoPopup from "@/components/app/PromoPopup";
 import SessionProvider from "@/components/providers/SessionProvider";
 
 const poppins = Poppins({
@@ -125,6 +126,7 @@ export default function RootLayout({
       <body className="min-h-dvh bg-background antialiased">
         <SessionProvider>
           <SplashScreen />
+          <PromoPopup />
           {children}
         </SessionProvider>
       </body>
