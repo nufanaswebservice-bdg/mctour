@@ -122,6 +122,12 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        {/* Travelpayouts Affiliate Script */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function () {var script = document.createElement("script");script.async = 1;script.setAttribute("data-cmp-ab","2");script.src = 'https://emrldco.com/NTU4NDQ1.js?t=558445';document.head.appendChild(script);})();`
+          }}
+        />
       </head>
       <body className="min-h-dvh bg-background antialiased">
         <SessionProvider>
