@@ -31,11 +31,16 @@ export default function HeroSearch() {
   };
 
   const handleSearch = () => {
-    const dateText = checkIn && checkOut
-      ? `${formatDateDisplay(checkIn)} - ${formatDateDisplay(checkOut)}`
-      : "Fleksibel";
-    const msg = `Halo mcTour, saya ingin cari paket:\n- Destinasi: ${destination || "Belum ditentukan"}\n- Tanggal: ${dateText}\n- Tamu: ${guestDisplay}`;
-    window.open(`https://wa.me/62818548833?text=${encodeURIComponent(msg)}`, "_blank");
+    const query = destination.toLowerCase();
+    // Determine destination type and redirect
+    const internationalKeywords = ["bangkok", "korea", "japan", "jepang", "china", "europe", "eropa", "singapore", "dubai", "tokyo", "seoul", "paris"];
+    const isInternational = internationalKeywords.some((k) => query.includes(k));
+
+    if (isInternational) {
+      window.location.href = "/paket-tour-luar-negeri";
+    } else {
+      window.location.href = "/paket-tour-domestik";
+    }
   };
 
   return (
@@ -70,12 +75,12 @@ export default function HeroSearch() {
             </h1>
           </motion.div>
 
-          {/* Search Card */}
+          {/* Search Card - More transparent glassmorphism */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.25, delay: 0.1 }}
-            className="glass-card p-4"
+            className="p-4 rounded-3xl bg-white/40 backdrop-blur-md border border-white/30 shadow-lg"
           >
             {/* Destination Input */}
             <div className="flex items-center gap-3 px-4 py-3.5 rounded-2xl bg-background/80 border border-primary/10 mb-3 focus-within:border-primary/30 focus-within:ring-2 focus-within:ring-primary/5 transition-all">
