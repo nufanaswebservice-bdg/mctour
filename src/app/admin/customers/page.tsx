@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { supabase } from "@/lib/supabase";
 import {
   ArrowLeft,
   Search,
@@ -9,20 +10,20 @@ import {
   Filter,
   Mail,
   Phone,
+  Plus,
+  X,
 } from "lucide-react";
 
-const mockCustomers = [
-  { id: 1, name: "Ahmad Fauzi", email: "ahmad.fauzi@gmail.com", phone: "081234567890", totalBookings: 5, totalSpent: 75000000, memberSince: "2023-03-15", status: "vip" },
-  { id: 2, name: "Siti Rahayu", email: "siti.rahayu@yahoo.com", phone: "085678901234", totalBookings: 3, totalSpent: 48000000, memberSince: "2023-06-20", status: "active" },
-  { id: 3, name: "Budi Santoso", email: "budi.s@outlook.com", phone: "087890123456", totalBookings: 8, totalSpent: 120000000, memberSince: "2022-11-10", status: "vip" },
-  { id: 4, name: "Dewi Lestari", email: "dewi.lestari@gmail.com", phone: "082345678901", totalBookings: 1, totalSpent: 850000, memberSince: "2024-12-01", status: "new" },
-  { id: 5, name: "Rizki Pratama", email: "rizki.p@gmail.com", phone: "089012345678", totalBookings: 4, totalSpent: 35000000, memberSince: "2023-09-05", status: "active" },
-  { id: 6, name: "Nur Hidayah", email: "nur.hidayah@gmail.com", phone: "081456789012", totalBookings: 2, totalSpent: 54000000, memberSince: "2024-01-22", status: "active" },
-  { id: 7, name: "Eko Prasetyo", email: "eko.prasetyo@company.co.id", phone: "083567890123", totalBookings: 6, totalSpent: 92000000, memberSince: "2023-01-08", status: "vip" },
-  { id: 8, name: "Fitri Handayani", email: "fitri.h@gmail.com", phone: "086789012345", totalBookings: 1, totalSpent: 1200000, memberSince: "2024-11-15", status: "new" },
-  { id: 9, name: "Dian Permata", email: "dian.permata@mail.com", phone: "084678901234", totalBookings: 3, totalSpent: 28000000, memberSince: "2024-04-10", status: "active" },
-  { id: 10, name: "Hendra Wijaya", email: "hendra.w@corp.id", phone: "088901234567", totalBookings: 10, totalSpent: 250000000, memberSince: "2022-05-18", status: "vip" },
-];
+interface Customer {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  total_bookings: number;
+  total_spent: number;
+  status: string;
+  created_at: string;
+}
 
 const statusColors: Record<string, string> = {
   active: "bg-blue-100 text-blue-700",
@@ -31,10 +32,51 @@ const statusColors: Record<string, string> = {
 };
 
 export default function CustomersPage() {
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [showForm, setShowForm] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    status: "new",
+  });
 
-  const filtered = mockCustomers.filter((c) => {
+  useEffect(() => {
+    fetchCustomers();
+  }, []);
+
+  const fetchCustomers = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("customers")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (data) setCustomers(data);
+    setLoading(false);
+  };
+
+  const handleAdd = async () => {
+    const { error } = await supabase.from("customers").insert([
+      {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        status: formData.status,
+        total_bookings: 0,
+        total_spent: 0,
+      },
+    ]);
+    if (!error) {
+      setShowForm(false);
+      setFormData({ name: "", email: "", phone: "", status: "new" });
+      fetchCustomers();
+    }
+  };
+
+  const filtered = customers.filter((c) => {
     const matchSearch =
       c.name.toLowerCase().includes(search.toLowerCase()) ||
       c.email.toLowerCase().includes(search.toLowerCase()) ||
@@ -42,6 +84,20 @@ export default function CustomersPage() {
     const matchStatus = statusFilter === "all" || c.status === statusFilter;
     return matchSearch && matchStatus;
   });
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="animate-pulse space-y-4">
+            <div className="h-8 bg-gray-200 rounded w-1/3" />
+            <div className="h-4 bg-gray-200 rounded w-1/4" />
+            <div className="h-64 bg-gray-200 rounded-xl" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -52,14 +108,50 @@ export default function CustomersPage() {
             <ArrowLeft className="w-4 h-4" />
             Kembali ke Dashboard
           </Link>
-          <div className="flex items-center gap-3">
-            <Users className="w-6 h-6 text-[#1565FF]" />
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Manajemen Customer</h1>
-              <p className="text-gray-500 text-sm mt-1">Daftar pelanggan terdaftar</p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Users className="w-6 h-6 text-[#1565FF]" />
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">Manajemen Customer</h1>
+                <p className="text-gray-500 text-sm mt-1">Daftar pelanggan terdaftar</p>
+              </div>
             </div>
+            <button
+              onClick={() => setShowForm(true)}
+              className="inline-flex items-center gap-2 bg-[#1565FF] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#1253d4] transition-colors"
+            >
+              <Plus className="w-4 h-4" />
+              Tambah Customer
+            </button>
           </div>
         </div>
+
+        {/* Add Form Modal */}
+        {showForm && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+            <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md mx-4">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-bold text-gray-900">Tambah Customer Baru</h2>
+                <button onClick={() => setShowForm(false)} className="p-1 hover:bg-gray-100 rounded">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="space-y-3">
+                <input type="text" placeholder="Nama" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1565FF]/20 focus:border-[#1565FF]" />
+                <input type="email" placeholder="Email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1565FF]/20 focus:border-[#1565FF]" />
+                <input type="text" placeholder="No. Telepon" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1565FF]/20 focus:border-[#1565FF]" />
+                <select value={formData.status} onChange={(e) => setFormData({ ...formData, status: e.target.value })} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1565FF]/20 focus:border-[#1565FF]">
+                  <option value="new">New</option>
+                  <option value="active">Active</option>
+                  <option value="vip">VIP</option>
+                </select>
+                <button onClick={handleAdd} className="w-full bg-[#1565FF] text-white py-2 rounded-lg text-sm font-medium hover:bg-[#1253d4] transition-colors">
+                  Simpan Customer
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Filters */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
@@ -125,13 +217,15 @@ export default function CustomersPage() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-900 font-medium">{customer.totalBookings}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900 font-medium">{customer.total_bookings}</td>
                     <td className="px-4 py-3 text-sm text-gray-900 font-medium">
-                      Rp {customer.totalSpent.toLocaleString("id-ID")}
+                      Rp {customer.total_spent.toLocaleString("id-ID")}
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-500">{customer.memberSince}</td>
+                    <td className="px-4 py-3 text-sm text-gray-500">
+                      {new Date(customer.created_at).toLocaleDateString("id-ID")}
+                    </td>
                     <td className="px-4 py-3">
-                      <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium uppercase ${statusColors[customer.status]}`}>
+                      <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium uppercase ${statusColors[customer.status] || "bg-gray-100 text-gray-700"}`}>
                         {customer.status}
                       </span>
                     </td>
@@ -142,11 +236,11 @@ export default function CustomersPage() {
           </div>
           {filtered.length === 0 && (
             <div className="text-center py-12 text-gray-400">
-              <p>Tidak ada customer ditemukan</p>
+              <p>Belum ada data</p>
             </div>
           )}
           <div className="border-t border-gray-100 px-4 py-3 text-sm text-gray-500">
-            Menampilkan {filtered.length} dari {mockCustomers.length} customer
+            Menampilkan {filtered.length} dari {customers.length} customer
           </div>
         </div>
       </div>

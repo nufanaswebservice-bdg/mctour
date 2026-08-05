@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { supabase } from "@/lib/supabase";
 import {
   ArrowLeft,
   FileSpreadsheet,
@@ -12,24 +13,80 @@ import {
   Package,
   Users,
   DollarSign,
-  Eye,
   Calendar,
 } from "lucide-react";
 
-const summaryData = [
-  { label: "Total Sales", value: "342", change: "+12%", icon: ShoppingCart, color: "bg-blue-500" },
-  { label: "Produk Aktif", value: "48", change: "+5", icon: Package, color: "bg-green-500" },
-  { label: "Visitors", value: "28.450", change: "+18%", icon: Eye, color: "bg-purple-500" },
-  { label: "Revenue", value: "Rp 523 Jt", change: "+24%", icon: DollarSign, color: "bg-amber-500" },
-  { label: "Customers", value: "1.256", change: "+8%", icon: Users, color: "bg-pink-500" },
-];
+interface SummaryData {
+  totalBookings: number;
+  totalProducts: number;
+  totalCustomers: number;
+  totalRevenue: number;
+}
 
 export default function ReportsPage() {
+  const [loading, setLoading] = useState(true);
+  const [summary, setSummary] = useState<SummaryData>({
+    totalBookings: 0,
+    totalProducts: 0,
+    totalCustomers: 0,
+    totalRevenue: 0,
+  });
   const [period, setPeriod] = useState("month");
+
+  useEffect(() => {
+    fetchSummary();
+  }, []);
+
+  const fetchSummary = async () => {
+    setLoading(true);
+    const [bookingsRes, productsRes, customersRes, transactionsRes] = await Promise.all([
+      supabase.from("bookings").select("id", { count: "exact", head: true }),
+      supabase.from("products").select("id", { count: "exact", head: true }),
+      supabase.from("customers").select("id", { count: "exact", head: true }),
+      supabase.from("transactions").select("amount, type"),
+    ]);
+
+    const totalRevenue = (transactionsRes.data || [])
+      .filter((t: { type: string }) => t.type === "income")
+      .reduce((sum: number, t: { amount: number }) => sum + t.amount, 0);
+
+    setSummary({
+      totalBookings: bookingsRes.count || 0,
+      totalProducts: productsRes.count || 0,
+      totalCustomers: customersRes.count || 0,
+      totalRevenue,
+    });
+    setLoading(false);
+  };
 
   const handleExport = (format: string) => {
     alert(`Export laporan dalam format ${format.toUpperCase()} (periode: ${period})`);
   };
+
+  const summaryCards = [
+    { label: "Total Booking", value: summary.totalBookings.toString(), icon: ShoppingCart, color: "bg-blue-500" },
+    { label: "Produk Aktif", value: summary.totalProducts.toString(), icon: Package, color: "bg-green-500" },
+    { label: "Revenue", value: `Rp ${summary.totalRevenue.toLocaleString("id-ID")}`, icon: DollarSign, color: "bg-amber-500" },
+    { label: "Customers", value: summary.totalCustomers.toString(), icon: Users, color: "bg-pink-500" },
+  ];
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="animate-pulse space-y-4">
+            <div className="h-8 bg-gray-200 rounded w-1/3" />
+            <div className="h-4 bg-gray-200 rounded w-1/4" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="h-24 bg-gray-200 rounded-xl" />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -91,8 +148,8 @@ export default function ReportsPage() {
         </div>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6">
-          {summaryData.map((item) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          {summaryCards.map((item) => (
             <div key={item.label} className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
               <div className="flex items-center gap-3 mb-2">
                 <div className={`w-9 h-9 rounded-lg ${item.color} flex items-center justify-center`}>
@@ -100,12 +157,7 @@ export default function ReportsPage() {
                 </div>
                 <span className="text-xs text-gray-500">{item.label}</span>
               </div>
-              <div className="flex items-end justify-between">
-                <p className="text-xl font-bold text-gray-900">{item.value}</p>
-                <span className="text-xs font-medium text-green-600 bg-green-50 px-1.5 py-0.5 rounded">
-                  {item.change}
-                </span>
-              </div>
+              <p className="text-xl font-bold text-gray-900">{item.value}</p>
             </div>
           ))}
         </div>

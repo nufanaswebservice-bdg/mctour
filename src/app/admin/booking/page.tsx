@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { supabase } from "@/lib/supabase";
 import {
   ArrowLeft,
   Search,
@@ -10,20 +11,23 @@ import {
   CheckCircle,
   XCircle,
   Filter,
+  Plus,
+  X,
 } from "lucide-react";
 
-const mockBookings = [
-  { id: "BK-001", customer: "Ahmad Fauzi", product: "Tour Bali Paradise 4D3N", amount: 4500000, status: "pending", date: "2024-12-20" },
-  { id: "BK-002", customer: "Siti Rahayu", product: "Umroh Reguler 9 Hari", amount: 32000000, status: "success", date: "2024-12-19" },
-  { id: "BK-003", customer: "Budi Santoso", product: "Tour Korea Autumn 5D4N", amount: 15000000, status: "success", date: "2024-12-18" },
-  { id: "BK-004", customer: "Dewi Lestari", product: "Gathering Puncak 2D1N", amount: 850000, status: "failed", date: "2024-12-18" },
-  { id: "BK-005", customer: "Rizki Pratama", product: "Rental Alphard Jakarta", amount: 2500000, status: "pending", date: "2024-12-17" },
-  { id: "BK-006", customer: "Nur Hidayah", product: "Tour Japan Sakura 6D5N", amount: 22000000, status: "refund", date: "2024-12-16" },
-  { id: "BK-007", customer: "Eko Prasetyo", product: "Hotel Bali 3 Malam", amount: 3200000, status: "success", date: "2024-12-15" },
-  { id: "BK-008", customer: "Fitri Handayani", product: "Visa Jepang", amount: 1200000, status: "pending", date: "2024-12-15" },
-  { id: "BK-009", customer: "Dian Permata", product: "Tiket Pesawat CGK-DPS", amount: 1800000, status: "success", date: "2024-12-14" },
-  { id: "BK-010", customer: "Hendra Wijaya", product: "Tour Europe Wonder 10D", amount: 45000000, status: "pending", date: "2024-12-14" },
-];
+interface Booking {
+  id: string;
+  booking_code: string;
+  customer_name: string;
+  customer_email: string;
+  customer_phone: string;
+  product_name: string;
+  product_category: string;
+  amount: number;
+  status: string;
+  notes: string;
+  created_at: string;
+}
 
 const statusColors: Record<string, string> = {
   pending: "bg-yellow-100 text-yellow-700",
@@ -33,17 +37,88 @@ const statusColors: Record<string, string> = {
 };
 
 export default function BookingPage() {
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [showForm, setShowForm] = useState(false);
+  const [formData, setFormData] = useState({
+    booking_code: "",
+    customer_name: "",
+    customer_email: "",
+    customer_phone: "",
+    product_name: "",
+    product_category: "",
+    amount: "",
+    status: "pending",
+    notes: "",
+  });
 
-  const filtered = mockBookings.filter((b) => {
+  useEffect(() => {
+    fetchBookings();
+  }, []);
+
+  const fetchBookings = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("bookings")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (data) setBookings(data);
+    setLoading(false);
+  };
+
+  const handleAdd = async () => {
+    const { error } = await supabase.from("bookings").insert([
+      {
+        booking_code: formData.booking_code,
+        customer_name: formData.customer_name,
+        customer_email: formData.customer_email,
+        customer_phone: formData.customer_phone,
+        product_name: formData.product_name,
+        product_category: formData.product_category,
+        amount: Number(formData.amount),
+        status: formData.status,
+        notes: formData.notes,
+      },
+    ]);
+    if (!error) {
+      setShowForm(false);
+      setFormData({ booking_code: "", customer_name: "", customer_email: "", customer_phone: "", product_name: "", product_category: "", amount: "", status: "pending", notes: "" });
+      fetchBookings();
+    }
+  };
+
+  const updateStatus = async (id: string, newStatus: string) => {
+    const { error } = await supabase
+      .from("bookings")
+      .update({ status: newStatus })
+      .eq("id", id);
+    if (!error) fetchBookings();
+  };
+
+  const filtered = bookings.filter((b) => {
     const matchSearch =
-      b.customer.toLowerCase().includes(search.toLowerCase()) ||
-      b.product.toLowerCase().includes(search.toLowerCase()) ||
-      b.id.toLowerCase().includes(search.toLowerCase());
+      b.customer_name.toLowerCase().includes(search.toLowerCase()) ||
+      b.product_name.toLowerCase().includes(search.toLowerCase()) ||
+      b.booking_code.toLowerCase().includes(search.toLowerCase());
     const matchStatus = statusFilter === "all" || b.status === statusFilter;
     return matchSearch && matchStatus;
   });
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="animate-pulse space-y-4">
+            <div className="h-8 bg-gray-200 rounded w-1/3" />
+            <div className="h-4 bg-gray-200 rounded w-1/4" />
+            <div className="h-64 bg-gray-200 rounded-xl" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -54,9 +129,47 @@ export default function BookingPage() {
             <ArrowLeft className="w-4 h-4" />
             Kembali ke Dashboard
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900">Manajemen Booking</h1>
-          <p className="text-gray-500 text-sm mt-1">Kelola semua pesanan dan transaksi</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Manajemen Booking</h1>
+              <p className="text-gray-500 text-sm mt-1">Kelola semua pesanan dan transaksi</p>
+            </div>
+            <button
+              onClick={() => setShowForm(true)}
+              className="inline-flex items-center gap-2 bg-[#1565FF] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#1253d4] transition-colors"
+            >
+              <Plus className="w-4 h-4" />
+              Tambah Booking
+            </button>
+          </div>
         </div>
+
+        {/* Add Form Modal */}
+        {showForm && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+            <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-bold text-gray-900">Tambah Booking Baru</h2>
+                <button onClick={() => setShowForm(false)} className="p-1 hover:bg-gray-100 rounded">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="space-y-3">
+                <input type="text" placeholder="Booking Code (e.g. BK-001)" value={formData.booking_code} onChange={(e) => setFormData({ ...formData, booking_code: e.target.value })} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1565FF]/20 focus:border-[#1565FF]" />
+                <input type="text" placeholder="Nama Customer" value={formData.customer_name} onChange={(e) => setFormData({ ...formData, customer_name: e.target.value })} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1565FF]/20 focus:border-[#1565FF]" />
+                <input type="email" placeholder="Email Customer" value={formData.customer_email} onChange={(e) => setFormData({ ...formData, customer_email: e.target.value })} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1565FF]/20 focus:border-[#1565FF]" />
+                <input type="text" placeholder="Phone Customer" value={formData.customer_phone} onChange={(e) => setFormData({ ...formData, customer_phone: e.target.value })} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1565FF]/20 focus:border-[#1565FF]" />
+                <input type="text" placeholder="Nama Produk" value={formData.product_name} onChange={(e) => setFormData({ ...formData, product_name: e.target.value })} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1565FF]/20 focus:border-[#1565FF]" />
+                <input type="text" placeholder="Kategori Produk" value={formData.product_category} onChange={(e) => setFormData({ ...formData, product_category: e.target.value })} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1565FF]/20 focus:border-[#1565FF]" />
+                <input type="number" placeholder="Amount (Rp)" value={formData.amount} onChange={(e) => setFormData({ ...formData, amount: e.target.value })} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1565FF]/20 focus:border-[#1565FF]" />
+                <textarea placeholder="Catatan (opsional)" value={formData.notes} onChange={(e) => setFormData({ ...formData, notes: e.target.value })} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1565FF]/20 focus:border-[#1565FF]" rows={2} />
+                <button onClick={handleAdd} className="w-full bg-[#1565FF] text-white py-2 rounded-lg text-sm font-medium hover:bg-[#1253d4] transition-colors">
+                  Simpan Booking
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Filters */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
@@ -112,27 +225,37 @@ export default function BookingPage() {
               <tbody className="divide-y divide-gray-50">
                 {filtered.map((booking) => (
                   <tr key={booking.id} className="hover:bg-gray-50/50 transition-colors">
-                    <td className="px-4 py-3 text-sm font-medium text-[#1565FF]">{booking.id}</td>
-                    <td className="px-4 py-3 text-sm text-gray-900">{booking.customer}</td>
-                    <td className="px-4 py-3 text-sm text-gray-600 max-w-[200px] truncate">{booking.product}</td>
+                    <td className="px-4 py-3 text-sm font-medium text-[#1565FF]">{booking.booking_code}</td>
+                    <td className="px-4 py-3 text-sm text-gray-900">{booking.customer_name}</td>
+                    <td className="px-4 py-3 text-sm text-gray-600 max-w-[200px] truncate">{booking.product_name}</td>
                     <td className="px-4 py-3 text-sm font-medium text-gray-900">
                       Rp {booking.amount.toLocaleString("id-ID")}
                     </td>
                     <td className="px-4 py-3">
-                      <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium capitalize ${statusColors[booking.status]}`}>
+                      <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium capitalize ${statusColors[booking.status] || "bg-gray-100 text-gray-700"}`}>
                         {booking.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-500">{booking.date}</td>
+                    <td className="px-4 py-3 text-sm text-gray-500">
+                      {new Date(booking.created_at).toLocaleDateString("id-ID")}
+                    </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
                         <button className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#1565FF]" title="Lihat Detail">
                           <Eye className="w-4 h-4" />
                         </button>
-                        <button className="p-1.5 rounded-lg hover:bg-green-50 text-gray-500 hover:text-green-600" title="Approve">
+                        <button
+                          onClick={() => updateStatus(booking.id, "success")}
+                          className="p-1.5 rounded-lg hover:bg-green-50 text-gray-500 hover:text-green-600"
+                          title="Approve"
+                        >
                           <CheckCircle className="w-4 h-4" />
                         </button>
-                        <button className="p-1.5 rounded-lg hover:bg-red-50 text-gray-500 hover:text-red-600" title="Reject">
+                        <button
+                          onClick={() => updateStatus(booking.id, "failed")}
+                          className="p-1.5 rounded-lg hover:bg-red-50 text-gray-500 hover:text-red-600"
+                          title="Reject"
+                        >
                           <XCircle className="w-4 h-4" />
                         </button>
                       </div>
@@ -144,11 +267,11 @@ export default function BookingPage() {
           </div>
           {filtered.length === 0 && (
             <div className="text-center py-12 text-gray-400">
-              <p>Tidak ada booking ditemukan</p>
+              <p>Belum ada data</p>
             </div>
           )}
           <div className="border-t border-gray-100 px-4 py-3 text-sm text-gray-500">
-            Menampilkan {filtered.length} dari {mockBookings.length} booking
+            Menampilkan {filtered.length} dari {bookings.length} booking
           </div>
         </div>
       </div>

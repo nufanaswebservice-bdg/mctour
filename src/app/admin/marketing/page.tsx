@@ -4,87 +4,11 @@ import Link from "next/link";
 import {
   ArrowLeft,
   Megaphone,
-  TrendingUp,
-  MousePointerClick,
-  Target,
-  DollarSign,
+  ExternalLink,
+  Settings,
 } from "lucide-react";
 
-const mockCampaigns = [
-  {
-    id: 1,
-    name: "Google Ads - Tour Bali",
-    platform: "Google Ads",
-    spend: 5000000,
-    clicks: 3200,
-    conversions: 48,
-    roas: 4.2,
-    status: "active",
-  },
-  {
-    id: 2,
-    name: "Meta Ads - Umroh Promo",
-    platform: "Meta Ads",
-    spend: 3500000,
-    clicks: 2800,
-    conversions: 35,
-    roas: 5.8,
-    status: "active",
-  },
-  {
-    id: 3,
-    name: "TikTok - Tour Korea",
-    platform: "TikTok Ads",
-    spend: 2000000,
-    clicks: 5600,
-    conversions: 22,
-    roas: 3.1,
-    status: "active",
-  },
-  {
-    id: 4,
-    name: "Google Ads - Gathering",
-    platform: "Google Ads",
-    spend: 1500000,
-    clicks: 1200,
-    conversions: 18,
-    roas: 3.8,
-    status: "paused",
-  },
-  {
-    id: 5,
-    name: "Meta Ads - Rental Mobil",
-    platform: "Meta Ads",
-    spend: 1000000,
-    clicks: 980,
-    conversions: 15,
-    roas: 3.5,
-    status: "active",
-  },
-  {
-    id: 6,
-    name: "TikTok - Tour Japan",
-    platform: "TikTok Ads",
-    spend: 2500000,
-    clicks: 4200,
-    conversions: 12,
-    roas: 2.8,
-    status: "paused",
-  },
-];
-
-const platformColors: Record<string, string> = {
-  "Google Ads": "bg-blue-500",
-  "Meta Ads": "bg-indigo-500",
-  "TikTok Ads": "bg-gray-900",
-};
-
 export default function MarketingPage() {
-  const totalSpend = mockCampaigns.reduce((s, c) => s + c.spend, 0);
-  const totalClicks = mockCampaigns.reduce((s, c) => s + c.clicks, 0);
-  const totalConversions = mockCampaigns.reduce((s, c) => s + c.conversions, 0);
-  const avgRoas = (mockCampaigns.reduce((s, c) => s + c.roas, 0) / mockCampaigns.length).toFixed(1);
-
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -103,90 +27,57 @@ export default function MarketingPage() {
           </div>
         </div>
 
-        {/* Summary Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-red-500 flex items-center justify-center">
-                <DollarSign className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Total Spend</p>
-                <p className="text-lg font-bold text-gray-900">Rp {totalSpend.toLocaleString("id-ID")}</p>
-              </div>
-            </div>
+        {/* Info Card */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 text-center">
+          <div className="w-16 h-16 rounded-full bg-[#1565FF]/10 flex items-center justify-center mx-auto mb-4">
+            <Megaphone className="w-8 h-8 text-[#1565FF]" />
           </div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-blue-500 flex items-center justify-center">
-                <MousePointerClick className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Total Clicks</p>
-                <p className="text-lg font-bold text-gray-900">{totalClicks.toLocaleString("id-ID")}</p>
-              </div>
-            </div>
-          </div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-green-500 flex items-center justify-center">
-                <Target className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Conversions</p>
-                <p className="text-lg font-bold text-gray-900">{totalConversions}</p>
-              </div>
-            </div>
-          </div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-amber-500 flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Avg ROAS</p>
-                <p className="text-lg font-bold text-gray-900">{avgRoas}x</p>
-              </div>
-            </div>
-          </div>
-        </div>
+          <h2 className="text-xl font-bold text-gray-900 mb-2">
+            Hubungkan Google Ads / Meta Ads untuk melihat data marketing
+          </h2>
+          <p className="text-gray-500 text-sm mb-6 max-w-lg mx-auto">
+            Untuk menampilkan data performa kampanye iklan, Anda perlu menghubungkan akun Google Ads atau Meta Ads terlebih dahulu.
+          </p>
 
-        {/* Campaign Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {mockCampaigns.map((campaign) => (
-            <div key={campaign.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <div className={`w-3 h-3 rounded-full ${platformColors[campaign.platform]}`} />
-                  <span className="text-xs font-medium text-gray-500">{campaign.platform}</span>
+          {/* Setup Instructions */}
+          <div className="bg-gray-50 rounded-xl p-6 max-w-2xl mx-auto text-left">
+            <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <Settings className="w-4 h-4" />
+              Cara Setup Integrasi
+            </h3>
+            <div className="space-y-4">
+              <div className="flex items-start gap-3">
+                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#1565FF] text-white text-xs flex items-center justify-center font-bold">1</span>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">Google Ads</p>
+                  <p className="text-xs text-gray-500 mt-0.5">Buat API credentials di Google Ads Developer Console, lalu masukkan Client ID dan Client Secret di halaman Settings.</p>
+                  <a href="https://ads.google.com" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-[#1565FF] hover:underline mt-1">
+                    Buka Google Ads <ExternalLink className="w-3 h-3" />
+                  </a>
                 </div>
-                <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${
-                  campaign.status === "active" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"
-                }`}>
-                  {campaign.status === "active" ? "Active" : "Paused"}
-                </span>
               </div>
-              <h3 className="font-semibold text-gray-900 mb-4">{campaign.name}</h3>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="flex items-start gap-3">
+                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#1565FF] text-white text-xs flex items-center justify-center font-bold">2</span>
                 <div>
-                  <p className="text-xs text-gray-500">Spend</p>
-                  <p className="text-sm font-bold text-gray-900">Rp {campaign.spend.toLocaleString("id-ID")}</p>
+                  <p className="text-sm font-medium text-gray-900">Meta Ads (Facebook & Instagram)</p>
+                  <p className="text-xs text-gray-500 mt-0.5">Buat App di Meta for Developers, aktifkan Marketing API, lalu masukkan Access Token di halaman Settings.</p>
+                  <a href="https://developers.facebook.com" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-[#1565FF] hover:underline mt-1">
+                    Buka Meta Developers <ExternalLink className="w-3 h-3" />
+                  </a>
                 </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#1565FF] text-white text-xs flex items-center justify-center font-bold">3</span>
                 <div>
-                  <p className="text-xs text-gray-500">Clicks</p>
-                  <p className="text-sm font-bold text-gray-900">{campaign.clicks.toLocaleString("id-ID")}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500">Conversions</p>
-                  <p className="text-sm font-bold text-gray-900">{campaign.conversions}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500">ROAS</p>
-                  <p className="text-sm font-bold text-green-600">{campaign.roas}x</p>
+                  <p className="text-sm font-medium text-gray-900">TikTok Ads (Opsional)</p>
+                  <p className="text-xs text-gray-500 mt-0.5">Daftarkan app di TikTok for Business dan hubungkan via API token.</p>
+                  <a href="https://ads.tiktok.com" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-[#1565FF] hover:underline mt-1">
+                    Buka TikTok Ads <ExternalLink className="w-3 h-3" />
+                  </a>
                 </div>
               </div>
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </div>
