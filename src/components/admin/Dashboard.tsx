@@ -204,6 +204,12 @@ export default function Dashboard() {
             <button className="relative p-2 rounded-xl hover:bg-gray-100">
               <Bell size={18} />
             </button>
+            <button
+              onClick={() => { localStorage.removeItem("mctour_admin_session"); window.location.href = "/admin"; }}
+              className="px-3 py-1.5 rounded-xl bg-red-50 text-red-600 text-xs font-medium hover:bg-red-100 transition-colors"
+            >
+              Logout
+            </button>
             <div className="w-8 h-8 rounded-full bg-[#1565FF] flex items-center justify-center text-white text-xs font-bold">A</div>
           </div>
         </header>
