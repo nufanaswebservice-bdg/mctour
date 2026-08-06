@@ -122,6 +122,8 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        {/* Google Search Console Verification */}
+        <meta name="google-site-verification" content="cLvpdGyxVL7hwbVlYZmFdQNVo-B3tMH0oeHrmwNDKWY" />
         {/* Travelpayouts Affiliate Script */}
         <script
           dangerouslySetInnerHTML={{
