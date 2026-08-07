@@ -89,8 +89,8 @@ function CityInput({ value, onChange, placeholder, icon: Icon }: { value: string
 
 export default function FlightSearch() {
   const [tripType, setTripType] = useState<"roundtrip" | "oneway">("roundtrip");
-  const [from, setFrom] = useState("Jakarta (CGK)");
-  const [to, setTo] = useState("Bali (DPS)");
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
   const [departDate, setDepartDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
   const [passengers, setPassengers] = useState(1);
@@ -99,27 +99,35 @@ export default function FlightSearch() {
 
   const swap = () => { const tmp = from; setFrom(to); setTo(tmp); };
 
-  // Extract airport code from input, or use city name for Aviasales search
-  const getSearchTerm = (input: string) => {
-    const codeMatch = input.match(/\(([A-Z]{3})\)/);
-    if (codeMatch) return codeMatch[1];
-    // If no code, use city name - Aviasales will resolve it
-    return input.trim();
+  // Extract IATA code from selection like "Jakarta (CGK)"
+  const getCode = (input: string) => {
+    const match = input.match(/\(([A-Z]{3})\)/);
+    return match ? match[1] : "";
   };
 
   const handleSearch = () => {
-    const fromTerm = getSearchTerm(from);
-    const toTerm = getSearchTerm(to);
+    const fromCode = getCode(from);
+    const toCode = getCode(to);
 
-    // Build Aviasales URL - works with both IATA codes and city names
-    let url: string;
-    if (fromTerm.length === 3 && toTerm.length === 3 && /^[A-Z]+$/.test(fromTerm) && /^[A-Z]+$/.test(toTerm)) {
-      // Both are IATA codes - use direct search format
-      url = `https://www.aviasales.com/search/${fromTerm}${departDate ? departDate.replace(/-/g, "").slice(2) : ""}${toTerm}${returnDate ? returnDate.replace(/-/g, "").slice(2) : ""}${passengers}?marker=${AFFILIATE_ID}&locale=id&currency=idr`;
-    } else {
-      // Use text search - Aviasales will resolve city names
-      url = `https://www.aviasales.com/search?origin_name=${encodeURIComponent(fromTerm)}&destination_name=${encodeURIComponent(toTerm)}&depart_date=${departDate}&return_date=${returnDate}&adults=${passengers}&marker=${AFFILIATE_ID}&locale=id&currency=idr`;
+    if (!fromCode || !toCode) {
+      alert("Pilih kota asal dan tujuan dari dropdown");
+      return;
     }
+
+    // Format: aviasales.com/search/CGKDPS0608 (code+code+DDMM)
+    let datePart = "";
+    if (departDate) {
+      const d = new Date(departDate);
+      datePart = String(d.getDate()).padStart(2, "0") + String(d.getMonth() + 1).padStart(2, "0");
+    }
+
+    let returnPart = "";
+    if (returnDate && tripType === "roundtrip") {
+      const r = new Date(returnDate);
+      returnPart = String(r.getDate()).padStart(2, "0") + String(r.getMonth() + 1).padStart(2, "0");
+    }
+
+    const url = `https://www.aviasales.com/search/${fromCode}${datePart}${toCode}${returnPart}${passengers}?marker=${AFFILIATE_ID}&locale=id&currency=idr`;
     window.open(url, "_blank");
   };
 
@@ -229,7 +237,7 @@ export default function FlightSearch() {
         </motion.button>
 
         <p className="text-[9px] text-muted text-center mt-2">
-          Ketik kota tujuan manapun → hasil pencarian langsung muncul di Aviasales
+          Pilih kota dari dropdown lalu klik Cari Penerbangan
         </p>
       </div>
     </motion.section>
