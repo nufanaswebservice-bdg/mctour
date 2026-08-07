@@ -127,7 +127,7 @@ export default function FlightSearch() {
       returnPart = String(r.getDate()).padStart(2, "0") + String(r.getMonth() + 1).padStart(2, "0");
     }
 
-    const url = `https://www.aviasales.com/search/${fromCode}${datePart}${toCode}${returnPart}${passengers}?marker=${AFFILIATE_ID}&locale=id&currency=idr`;
+    const url = `https://www.aviasales.com/search/${fromCode}${datePart}${toCode}${returnPart}${passengers}?marker=${AFFILIATE_ID}&locale=id&currency=idr&country=ID`;
     window.open(url, "_blank");
   };
 
@@ -237,7 +237,7 @@ export default function FlightSearch() {
         </motion.button>
 
         <p className="text-[9px] text-muted text-center mt-2">
-          Pilih kota dari dropdown lalu klik Cari Penerbangan
+          Pilih kota dari dropdown lalu klik Cari Penerbangan. Harga dalam IDR — jika tampil USD, klik icon mata uang di kanan atas halaman hasil.
         </p>
       </div>
     </motion.section>
