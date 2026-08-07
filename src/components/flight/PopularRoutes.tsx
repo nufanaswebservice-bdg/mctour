@@ -35,7 +35,7 @@ export default function PopularRoutes() {
         {routes.map((route, i) => (
           <motion.a
             key={`${route.fromCode}-${route.toCode}`}
-            href={`https://www.wego.co.id/flights/${route.fromCode}-${route.toCode}?adults=1`}
+            href={`https://www.skyscanner.co.id/transport/flights/${route.fromCode.toLowerCase()}/${route.toCode.toLowerCase()}/?adults=1&currency=IDR&locale=id-ID&market=ID`}
             target="_blank"
             rel="noopener noreferrer"
             initial={{ opacity: 0, x: -5 }}

@@ -127,10 +127,8 @@ export default function FlightSearch() {
       returnPart = String(r.getDate()).padStart(2, "0") + String(r.getMonth() + 1).padStart(2, "0");
     }
 
-    // Redirect to Wego Indonesia (native IDR) - correct URL format
-    const departFormatted = departDate || "";
-    const returnFormatted = tripType === "roundtrip" && returnDate ? returnDate : "";
-    const url = `https://www.wego.co.id/flights/${fromCode}-${toCode}/${departFormatted}${returnFormatted ? "/" + returnFormatted : ""}?adults=${passengers}&cabin=${cabinClass}`;
+    // Redirect to Skyscanner Indonesia (native IDR, reliable URL format)
+    const url = `https://www.skyscanner.co.id/transport/flights/${fromCode.toLowerCase()}/${toCode.toLowerCase()}/${departDate ? departDate.replace(/-/g, "").slice(2) : ""}/${returnDate && tripType === "roundtrip" ? returnDate.replace(/-/g, "").slice(2) : ""}?adults=${passengers}&cabinclass=${cabinClass}&currency=IDR&locale=id-ID&market=ID`;
     window.open(url, "_blank");
   };
 
