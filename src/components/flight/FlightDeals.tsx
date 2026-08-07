@@ -29,7 +29,7 @@ export default function FlightDeals() {
         {deals.map((deal, i) => (
           <motion.a
             key={`${deal.fromCode}-${deal.toCode}-${i}`}
-            href={`https://www.wego.co.id/flights/search?origin=${deal.fromCode}&destination=${deal.toCode}&adults=1&currency=IDR&locale=id`}
+            href={`https://www.wego.co.id/flights/${deal.fromCode}-${deal.toCode}?adults=1`}
             target="_blank"
             rel="noopener noreferrer"
             initial={{ opacity: 0, y: 8 }}

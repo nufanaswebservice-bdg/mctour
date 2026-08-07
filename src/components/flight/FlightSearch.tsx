@@ -127,8 +127,10 @@ export default function FlightSearch() {
       returnPart = String(r.getDate()).padStart(2, "0") + String(r.getMonth() + 1).padStart(2, "0");
     }
 
-    // Redirect to Wego Indonesia (native IDR)
-    const url = `https://www.wego.co.id/flights/search?marker=${AFFILIATE_ID}&origin=${fromCode}&destination=${toCode}&departure_date=${departDate}&return_date=${tripType === "roundtrip" ? returnDate : ""}&adults=${passengers}&cabin_class=${cabinClass}&currency=IDR&locale=id`;
+    // Redirect to Wego Indonesia (native IDR) - correct URL format
+    const departFormatted = departDate || "";
+    const returnFormatted = tripType === "roundtrip" && returnDate ? returnDate : "";
+    const url = `https://www.wego.co.id/flights/${fromCode}-${toCode}/${departFormatted}${returnFormatted ? "/" + returnFormatted : ""}?adults=${passengers}&cabin=${cabinClass}`;
     window.open(url, "_blank");
   };
 
