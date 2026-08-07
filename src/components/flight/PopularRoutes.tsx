@@ -35,7 +35,7 @@ export default function PopularRoutes() {
         {routes.map((route, i) => (
           <motion.a
             key={`${route.fromCode}-${route.toCode}`}
-            href={`https://www.jetradar.co.id/search/${route.fromCode}1${route.toCode}1?marker=${AFFILIATE_ID}&locale=id&currency=idr`}
+            href={`https://www.wego.co.id/flights/search?origin=${route.fromCode}&destination=${route.toCode}&adults=1&currency=IDR&locale=id`}
             target="_blank"
             rel="noopener noreferrer"
             initial={{ opacity: 0, x: -5 }}

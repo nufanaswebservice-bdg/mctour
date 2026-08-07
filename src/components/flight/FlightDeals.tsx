@@ -29,7 +29,7 @@ export default function FlightDeals() {
         {deals.map((deal, i) => (
           <motion.a
             key={`${deal.fromCode}-${deal.toCode}-${i}`}
-            href={`https://www.jetradar.co.id/search/${deal.fromCode}1${deal.toCode}1?marker=${AFFILIATE_ID}&locale=id&currency=idr`}
+            href={`https://www.wego.co.id/flights/search?origin=${deal.fromCode}&destination=${deal.toCode}&adults=1&currency=IDR&locale=id`}
             target="_blank"
             rel="noopener noreferrer"
             initial={{ opacity: 0, y: 8 }}
