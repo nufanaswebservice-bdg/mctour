@@ -1,38 +1,96 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, PlaneTakeoff, PlaneLanding, Calendar, Users, ArrowLeftRight, ChevronDown } from "lucide-react";
 
 const airports = [
-  { code: "CGK", city: "Jakarta", name: "Soekarno-Hatta" },
-  { code: "DPS", city: "Bali", name: "Ngurah Rai" },
-  { code: "SUB", city: "Surabaya", name: "Juanda" },
-  { code: "JOG", city: "Yogyakarta", name: "Adisucipto" },
-  { code: "BDO", city: "Bandung", name: "Husein Sastranegara" },
-  { code: "UPG", city: "Makassar", name: "Sultan Hasanuddin" },
-  { code: "KNO", city: "Medan", name: "Kualanamu" },
-  { code: "SOC", city: "Solo", name: "Adi Soemarmo" },
-  { code: "SRG", city: "Semarang", name: "Ahmad Yani" },
-  { code: "MLG", city: "Malang", name: "Abdul Rachman Saleh" },
-  { code: "LOP", city: "Lombok", name: "Zainuddin Abdul Madjid" },
-  { code: "PKU", city: "Pekanbaru", name: "Sultan Syarif Kasim II" },
-  { code: "BPN", city: "Balikpapan", name: "Sultan Aji Muhammad" },
-  { code: "PLM", city: "Palembang", name: "Sultan Mahmud Badaruddin" },
-  { code: "SIN", city: "Singapore", name: "Changi" },
-  { code: "KUL", city: "Kuala Lumpur", name: "KLIA" },
-  { code: "BKK", city: "Bangkok", name: "Suvarnabhumi" },
-  { code: "NRT", city: "Tokyo", name: "Narita" },
-  { code: "ICN", city: "Seoul", name: "Incheon" },
-  { code: "HKG", city: "Hong Kong", name: "Chek Lap Kok" },
+  { code: "CGK", city: "Jakarta" },
+  { code: "DPS", city: "Bali" },
+  { code: "SUB", city: "Surabaya" },
+  { code: "JOG", city: "Yogyakarta" },
+  { code: "BDO", city: "Bandung" },
+  { code: "UPG", city: "Makassar" },
+  { code: "KNO", city: "Medan" },
+  { code: "SOC", city: "Solo" },
+  { code: "SRG", city: "Semarang" },
+  { code: "MLG", city: "Malang" },
+  { code: "LOP", city: "Lombok" },
+  { code: "PKU", city: "Pekanbaru" },
+  { code: "BPN", city: "Balikpapan" },
+  { code: "PLM", city: "Palembang" },
+  { code: "BTH", city: "Batam" },
+  { code: "PDG", city: "Padang" },
+  { code: "DJB", city: "Jambi" },
+  { code: "PNK", city: "Pontianak" },
+  { code: "BDJ", city: "Banjarmasin" },
+  { code: "MDC", city: "Manado" },
+  { code: "SIN", city: "Singapore" },
+  { code: "KUL", city: "Kuala Lumpur" },
+  { code: "BKK", city: "Bangkok" },
+  { code: "NRT", city: "Tokyo" },
+  { code: "ICN", city: "Seoul" },
+  { code: "HKG", city: "Hong Kong" },
+  { code: "PEK", city: "Beijing" },
+  { code: "SYD", city: "Sydney" },
+  { code: "DXB", city: "Dubai" },
+  { code: "JED", city: "Jeddah" },
 ];
 
 const AFFILIATE_ID = "760307";
 
+function CityInput({ value, onChange, placeholder, icon: Icon }: { value: string; onChange: (val: string) => void; placeholder: string; icon: typeof PlaneTakeoff }) {
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const filtered = airports.filter((a) =>
+    a.city.toLowerCase().includes(value.toLowerCase()) || a.code.toLowerCase().includes(value.toLowerCase())
+  ).slice(0, 8);
+
+  return (
+    <div className="relative flex-1">
+      <div className="flex items-center gap-2 px-3 py-3 rounded-2xl bg-background/80 border border-primary/10 focus-within:border-primary/30 transition-all">
+        <Icon size={14} className="text-primary shrink-0" />
+        <input
+          ref={inputRef}
+          type="text"
+          value={value}
+          onChange={(e) => { onChange(e.target.value); setShowSuggestions(true); }}
+          onFocus={() => setShowSuggestions(true)}
+          onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+          placeholder={placeholder}
+          className="w-full bg-transparent outline-none text-xs text-dark-text font-medium placeholder:text-muted/50"
+        />
+      </div>
+      <AnimatePresence>
+        {showSuggestions && value.length > 0 && filtered.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: -5 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="absolute top-full left-0 right-0 mt-1 bg-white rounded-2xl shadow-xl border border-primary/10 z-50 max-h-48 overflow-y-auto"
+          >
+            {filtered.map((a) => (
+              <button
+                key={a.code}
+                onMouseDown={() => { onChange(`${a.city} (${a.code})`); setShowSuggestions(false); }}
+                className="w-full text-left px-3 py-2.5 text-xs hover:bg-primary/5 active:bg-primary/10 flex items-center justify-between"
+              >
+                <span className="font-medium text-dark-text">{a.city}</span>
+                <span className="text-[10px] text-muted font-mono">{a.code}</span>
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export default function FlightSearch() {
   const [tripType, setTripType] = useState<"roundtrip" | "oneway">("roundtrip");
-  const [from, setFrom] = useState("CGK");
-  const [to, setTo] = useState("DPS");
+  const [from, setFrom] = useState("Jakarta (CGK)");
+  const [to, setTo] = useState("Bali (DPS)");
   const [departDate, setDepartDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
   const [passengers, setPassengers] = useState(1);
@@ -41,9 +99,27 @@ export default function FlightSearch() {
 
   const swap = () => { const tmp = from; setFrom(to); setTo(tmp); };
 
+  // Extract airport code from input, or use city name for Aviasales search
+  const getSearchTerm = (input: string) => {
+    const codeMatch = input.match(/\(([A-Z]{3})\)/);
+    if (codeMatch) return codeMatch[1];
+    // If no code, use city name - Aviasales will resolve it
+    return input.trim();
+  };
+
   const handleSearch = () => {
-    // Redirect to Aviasales/Travelpayouts flight search
-    const url = `https://www.aviasales.com/search/${from}${departDate.replace(/-/g, "").slice(2)}${to}${returnDate ? returnDate.replace(/-/g, "").slice(2) : ""}${passengers}?marker=${AFFILIATE_ID}&locale=id&currency=idr`;
+    const fromTerm = getSearchTerm(from);
+    const toTerm = getSearchTerm(to);
+
+    // Build Aviasales URL - works with both IATA codes and city names
+    let url: string;
+    if (fromTerm.length === 3 && toTerm.length === 3 && /^[A-Z]+$/.test(fromTerm) && /^[A-Z]+$/.test(toTerm)) {
+      // Both are IATA codes - use direct search format
+      url = `https://www.aviasales.com/search/${fromTerm}${departDate ? departDate.replace(/-/g, "").slice(2) : ""}${toTerm}${returnDate ? returnDate.replace(/-/g, "").slice(2) : ""}${passengers}?marker=${AFFILIATE_ID}&locale=id&currency=idr`;
+    } else {
+      // Use text search - Aviasales will resolve city names
+      url = `https://www.aviasales.com/search?origin_name=${encodeURIComponent(fromTerm)}&destination_name=${encodeURIComponent(toTerm)}&depart_date=${departDate}&return_date=${returnDate}&adults=${passengers}&marker=${AFFILIATE_ID}&locale=id&currency=idr`;
+    }
     window.open(url, "_blank");
   };
 
@@ -73,25 +149,15 @@ export default function FlightSearch() {
           ))}
         </div>
 
-        {/* From - To */}
+        {/* From - To (now with manual text input) */}
         <div className="relative flex items-center gap-2 mb-2">
-          <div className="flex-1 flex items-center gap-2 px-3 py-3 rounded-2xl bg-background/80 border border-primary/10">
-            <PlaneTakeoff size={14} className="text-primary shrink-0" />
-            <select value={from} onChange={(e) => setFrom(e.target.value)} className="w-full bg-transparent outline-none text-xs text-dark-text font-medium">
-              {airports.map((a) => <option key={a.code} value={a.code}>{a.city} ({a.code})</option>)}
-            </select>
-          </div>
+          <CityInput value={from} onChange={setFrom} placeholder="Dari mana? (ketik kota)" icon={PlaneTakeoff} />
 
           <button onClick={swap} className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0 active:scale-90 active:rotate-180 transition-all">
             <ArrowLeftRight size={12} className="text-primary" />
           </button>
 
-          <div className="flex-1 flex items-center gap-2 px-3 py-3 rounded-2xl bg-background/80 border border-primary/10">
-            <PlaneLanding size={14} className="text-primary shrink-0" />
-            <select value={to} onChange={(e) => setTo(e.target.value)} className="w-full bg-transparent outline-none text-xs text-dark-text font-medium">
-              {airports.map((a) => <option key={a.code} value={a.code}>{a.city} ({a.code})</option>)}
-            </select>
-          </div>
+          <CityInput value={to} onChange={setTo} placeholder="Mau ke mana? (ketik kota)" icon={PlaneLanding} />
         </div>
 
         {/* Dates */}
@@ -161,6 +227,10 @@ export default function FlightSearch() {
             <Search size={16} /> Cari Penerbangan
           </span>
         </motion.button>
+
+        <p className="text-[9px] text-muted text-center mt-2">
+          Ketik kota tujuan manapun → hasil pencarian langsung muncul di Aviasales
+        </p>
       </div>
     </motion.section>
   );
